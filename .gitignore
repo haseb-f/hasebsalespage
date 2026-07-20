@@ -1,0 +1,19 @@
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor / tool local settings
+.claude/
+.vscode/
+.idea/
+
+# Dependencies (if this project ever adds npm packages)
+node_modules/
+
+# Logs
+*.log
+
+# Generated self-contained build output — a duplicate copy of index.html
+# with fonts/images inlined as base64, used only for Artifact previews.
+# Regenerate with: node build-preview.js
+preview.html

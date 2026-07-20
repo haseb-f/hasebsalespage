@@ -1,0 +1,1919 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>حاسب | برنامج استعادة الأرباح للمتاجر الإلكترونية</title>
+<meta name="description" content="اكتشف أين يُهدر ربح متجرك قبل أن تتخذ قرارًا ماليًا جديدًا. استشارة مالية مجانية مع مستشار متخصص في متاجر سلة وزد." />
+<link rel="icon" href="./assets/logo.png" type="image/png" />
+
+<style>
+  /* ============================================================
+     FONTS — self-hosted Expo Arabic (Haseb's brand typeface)
+     ============================================================ */
+  @font-face{font-family:'Expo Arabic';src:url('./fonts/Expo_Arabic_Light-Cmk8w8K1.woff2') format('woff2');font-weight:400;font-display:swap;}
+  @font-face{font-family:'Expo Arabic';src:url('./fonts/Expo_Arabic_Medium-B7WliHSW.woff2') format('woff2');font-weight:500;font-display:swap;}
+  @font-face{font-family:'Expo Arabic';src:url('./fonts/Expo_Arabic_Semibold-DjD7hrvy.woff2') format('woff2');font-weight:600;font-display:swap;}
+  @font-face{font-family:'Expo Arabic';src:url('./fonts/Expo_Arabic_Bold-gMswv_yR.woff2') format('woff2');font-weight:700;font-display:swap;}
+
+  /* ============================================================
+     DESIGN TOKENS — extracted from haseb.co production CSS
+     ============================================================ */
+  :root{
+    --green-50:#e7fdf0; --green-100:#cffbea; --green-300:#66edaa; --green-400:#32df84;
+    --green-500:#09c957; --green-600:#07a647; --green-700:#06853a; --green-800:#05662d;
+    --green-900:#045424; --green-950:#022d13;
+    --gray-50:#f9f9f9; --gray-100:#ececec; --gray-200:#d4d4d4; --gray-300:#bcbcbc;
+    --gray-400:#a5a5a5; --gray-500:#959595; --gray-600:#7a7a7a; --gray-700:#5f5f5f;
+    --gray-800:#454545; --gray-900:#2b2b2b;
+    --ink:#0a0f0d; --white:#ffffff; --black:#000000;
+
+    /* warning tones — used only for pain-point iconography (premium
+       burnt red/rust, deliberately not a bright alert red) */
+    --warn-50:#fdf2ef; --warn-100:#f7ddd3; --warn-500:#c04a2e;
+    --warn-600:#a83c24; --warn-700:#832d1a;
+
+    /* warm gold — used only for the active consultation-step highlight,
+       deliberately soft/muted, never a saturated yellow */
+    --gold-50:#fdf6e6; --gold-400:#e8c877; --gold-500:#d9ac4a;
+    --gold-600:#b8862a; --gold-700:#8f661e;
+    --gold-bg:#fff6dd; --gold-solid:#d9a300;
+
+    --bg-dark:#070b09;
+    --bg-dark-2:#0c1310;
+    --border-light:#ececec;
+    --border-dark:rgba(231,250,238,0.10);
+
+    --font:'Expo Arabic', -apple-system, 'Segoe UI', Tahoma, sans-serif;
+
+    --radius-sm:.625rem; --radius-md:1rem; --radius-lg:1.5rem; --radius-xl:2rem; --radius-2xl:2.75rem; --radius-full:999px;
+
+    --shadow-sm:0 1px 2px rgba(10,15,13,.05);
+    --shadow-md:0 10px 30px rgba(10,15,13,.06), 0 2px 8px rgba(10,15,13,.04);
+    --shadow-lg:0 30px 70px rgba(10,15,13,.12), 0 10px 24px rgba(10,15,13,.06);
+    --shadow-xl:0 40px 90px rgba(10,15,13,.09), 0 14px 30px rgba(10,15,13,.05);
+    --shadow-glow:0 0 0 1px rgba(9,201,87,.18), 0 24px 60px rgba(9,201,87,.18);
+    --shadow-card-dark:0 40px 100px rgba(4,10,7,.4), 0 14px 34px rgba(4,10,7,.24);
+
+    --container:1240px;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+
+  /* ============================================================
+     RESET & BASE
+     ============================================================ */
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  html,body{overflow-x:hidden;}
+  body{
+    font-family:var(--font);
+    color:var(--gray-900);
+    background-color:var(--white);
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cg fill='none' stroke='%2309c957' stroke-opacity='0.055' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M34 26 L98 26 L46 88 L110 88'/%3E%3Cpath d='M150 130 L192 130 L160 172 L202 172'/%3E%3C/g%3E%3C/svg%3E");
+    background-repeat:repeat;
+    background-size:240px 240px;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    line-height:1.5;
+  }
+  img{display:block;max-width:100%;}
+  svg{display:block;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;}
+  ::selection{background:var(--green-300);color:var(--green-950);}
+
+  .container{max-width:var(--container);margin-inline:auto;padding-inline:24px;}
+  @media(min-width:900px){.container{padding-inline:40px;}}
+
+  section{position:relative;}
+
+  h1,h2,h3,h4{font-weight:700;letter-spacing:-.01em;color:var(--gray-900);}
+
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:.8125rem;font-weight:600;letter-spacing:.02em;
+    color:var(--green-700);
+    background:var(--green-50);
+    border:1px solid var(--green-100);
+    padding:7px 16px 7px 14px;
+    border-radius:var(--radius-full);
+  }
+  @media(max-width:360px){.eyebrow{font-size:.75rem;padding:6px 14px 6px 12px;}}
+  .eyebrow-dot{width:6px;height:6px;border-radius:50%;background:var(--green-500);flex-shrink:0;}
+  .on-dark .eyebrow{
+    color:var(--green-300);
+    background:rgba(9,201,87,.10);
+    border-color:rgba(9,201,87,.22);
+  }
+
+  .section-head{max-width:680px;margin-inline:auto;text-align:center;margin-bottom:56px;}
+  .section-head h2{font-size:clamp(1.75rem,1.35rem + 1.9vw,2.625rem);line-height:1.28;margin-top:16px;}
+  .section-head p{font-size:clamp(1rem,.95rem + .3vw,1.125rem);color:var(--gray-700);line-height:1.85;margin-top:16px;}
+  .on-dark .section-head h2{color:var(--white);}
+  .on-dark .section-head p{color:var(--gray-300,#c7cdc9);}
+
+  /* ============================================================
+     REVEAL ANIMATION
+     ============================================================ */
+  [data-reveal]{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease),transform .8s var(--ease);}
+  [data-reveal].in-view{opacity:1;transform:translateY(0);}
+  [data-reveal-delay="1"]{transition-delay:.08s;}
+  [data-reveal-delay="2"]{transition-delay:.16s;}
+  [data-reveal-delay="3"]{transition-delay:.24s;}
+  [data-reveal-delay="4"]{transition-delay:.32s;}
+  @media(prefers-reduced-motion:reduce){
+    [data-reveal]{opacity:1;transform:none;transition:none;}
+    html{scroll-behavior:auto;}
+  }
+
+  /* ============================================================
+     BUTTONS
+     ============================================================ */
+  .btn{
+    position:relative;
+    display:inline-flex;align-items:center;justify-content:center;gap:10px;
+    font-family:inherit;font-weight:600;font-size:1rem;
+    padding:17px 28px;border-radius:var(--radius-full);
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease), background .35s var(--ease);
+    white-space:nowrap;
+  }
+  .btn-primary{
+    color:var(--white);
+    background:linear-gradient(90deg,var(--green-500),var(--green-900));
+    box-shadow:0 1px 0 rgba(255,255,255,.15) inset, 0 14px 30px -10px rgba(6,133,58,.55);
+  }
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,.2) inset, 0 20px 40px -8px rgba(6,133,58,.65);}
+  .btn-primary:active{transform:translateY(0);}
+  .btn-primary .icon{transition:transform .35s var(--ease);}
+  .btn-primary:hover .icon{transform:translateX(-5px);}
+  .btn-lg{padding:20px 34px;font-size:1.0625rem;}
+  @media(max-width:480px){
+    .btn-lg{width:100%;white-space:normal;text-align:center;padding:18px 22px;font-size:1rem;}
+  }
+  .btn-ghost{
+    color:var(--gray-900);
+    background:var(--white);
+    border:1px solid var(--border-light);
+    padding:12px 22px;font-size:.9375rem;
+  }
+  .btn-ghost:hover{border-color:var(--green-300);background:var(--green-50);}
+
+  /* ============================================================
+     NAV — single row: [logo] [ticker] [cta]
+     ============================================================ */
+  .nav-wrap{position:fixed;top:16px;left:0;right:0;z-index:100;display:flex;justify-content:center;padding-inline:16px;}
+  .nav{
+    width:100%;max-width:var(--container);
+    border-radius:var(--radius-full);
+    background:rgba(255,255,255,.72);
+    border:1px solid rgba(43,43,43,.06);
+    backdrop-filter:blur(18px) saturate(1.4);
+    -webkit-backdrop-filter:blur(18px) saturate(1.4);
+    box-shadow:0 8px 30px rgba(10,15,13,.05);
+    transition:box-shadow .4s var(--ease), background .4s var(--ease);
+  }
+  .nav.scrolled{box-shadow:0 14px 40px rgba(10,15,13,.10);background:rgba(255,255,255,.9);}
+
+  .nav-row{
+    display:flex;align-items:center;gap:18px;
+    padding:11px 12px 11px 26px;
+  }
+  .nav-logo{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+  .nav-logo img{height:46px;width:auto;display:block;}
+  .nav .btn-primary{padding:12px 22px;font-size:.9375rem;flex-shrink:0;}
+
+  /* announcement ticker — center element, fills the space between logo and CTA */
+  .nav-ticker{
+    flex:1 1 auto;min-width:0;
+    overflow:hidden;position:relative;
+    mask-image:linear-gradient(90deg, transparent 0, #000 10%, #000 90%, transparent 100%);
+    -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 10%, #000 90%, transparent 100%);
+  }
+  /* seamless marquee — ONE flat track holding the full message repeated
+     4x back-to-back (never a single list of items). Only the track is
+     animated, never the individual units. It travels exactly 1/4 of its
+     own width (= exactly one message's width) before the keyframe loops;
+     because repeat #2 is pixel-identical to repeat #1, that loop point
+     is invisible. Track width is 4x one message — always far wider than
+     the nav (capped at 1240px), so content never runs out mid-scroll.
+     Direction note: the page is dir="rtl", and an over-wide block in
+     RTL anchors its RIGHT edge flush to the container with overflow to
+     the left. Animating toward -X% (leftward) from that flush edge has
+     zero buffer to reveal and visibly runs out of content; animating
+     toward +X% (rightward) pulls from the abundant left-side overflow
+     and is seamless. That's a structural property of this layout, not
+     a speed/timing issue, so the ticker moves left-to-right below. */
+  .nav-ticker-track{
+    display:flex;gap:0;width:max-content;will-change:transform;
+    animation:ticker-scroll 60s linear infinite;
+  }
+  .nav-ticker-unit{display:flex;align-items:center;gap:0;flex-shrink:0;}
+  .nav-ticker-item{font-size:1.0625rem;font-weight:700;color:var(--green-800);white-space:nowrap;padding-inline:14px;letter-spacing:.005em;}
+  .nav-ticker-sep{color:var(--green-400);font-size:.6875rem;flex-shrink:0;}
+  .ticker-price-new{color:#f4c542;font-weight:800;text-shadow:0 1px 1px rgba(10,15,13,.18);}
+  .ticker-price-old{
+    color:inherit;font-weight:700;
+    text-decoration-line:line-through;text-decoration-color:#dc2626;
+    text-decoration-thickness:1.5px;text-decoration-skip-ink:none;
+  }
+  @keyframes ticker-scroll{from{transform:translateX(0);}to{transform:translateX(25%);}}
+  @media(prefers-reduced-motion:reduce){.nav-ticker-track{animation:none;}}
+
+  @media(max-width:760px){.nav-ticker{display:none;}}
+  @media(max-width:480px){
+    .nav-row{padding:10px 16px;gap:12px;}
+    .nav-logo img{height:38px;}
+    .nav .btn-primary{padding:12px 16px;font-size:.8125rem;}
+  }
+
+  /* ============================================================
+     HERO
+     ============================================================ */
+  .hero{
+    background:transparent;
+    padding-top:128px;padding-bottom:0;
+  }
+  @media(max-width:640px){.hero{padding-top:112px;}}
+
+  /* premium light glass-green card — colorful blurred blobs sit at the
+     bottom layer, a translucent frosted film blurs them, content rides
+     on top. The white page still shows through the card's edges. */
+  .hero-card{
+    position:relative;
+    overflow:hidden;
+    background:var(--gray-50);
+    border-radius:var(--radius-2xl);
+    border:1px solid rgba(9,201,87,.14);
+    box-shadow:0 40px 100px rgba(9,140,80,.14), 0 14px 34px rgba(9,140,80,.08), inset 0 1px 0 rgba(255,255,255,.7);
+    padding:76px 56px;
+  }
+  @media(max-width:1049px){.hero-card{padding:56px 32px;}}
+  @media(max-width:640px){.hero-card{padding:44px 22px;border-radius:var(--radius-xl);}}
+
+  .hero-glow{
+    position:absolute;inset:-8%;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(ellipse 55% 50% at 14% 18%, rgba(9,201,87,.5), transparent 62%),
+      radial-gradient(ellipse 50% 45% at 92% 8%, rgba(102,237,170,.48), transparent 60%),
+      radial-gradient(ellipse 55% 50% at 55% 105%, rgba(5,102,45,.32), transparent 65%);
+    filter:blur(50px);
+  }
+  .hero-glass-film{
+    position:absolute;inset:0;pointer-events:none;z-index:1;
+    background:linear-gradient(160deg, rgba(255,255,255,.86) 0%, rgba(240,253,246,.8) 52%, rgba(231,253,240,.72) 100%);
+    backdrop-filter:blur(30px) saturate(1.35);
+    -webkit-backdrop-filter:blur(30px) saturate(1.35);
+    border-bottom:1px solid rgba(255,255,255,.5);
+  }
+  .hero-grid{
+    position:absolute;inset:0;pointer-events:none;opacity:.7;z-index:1;
+    background-image:linear-gradient(rgba(6,133,58,.06) 1px, transparent 1px),linear-gradient(90deg, rgba(6,133,58,.06) 1px, transparent 1px);
+    background-size:56px 56px;
+    mask-image:radial-gradient(ellipse 70% 60% at 50% 20%, black 30%, transparent 75%);
+    -webkit-mask-image:radial-gradient(ellipse 70% 60% at 50% 20%, black 30%, transparent 75%);
+  }
+  .card-inner{position:relative;z-index:2;}
+  .hero-layout{display:grid;grid-template-columns:1fr;gap:64px;align-items:center;}
+  @media(min-width:1050px){.hero-layout{grid-template-columns:1.02fr .98fr;gap:40px;}}
+
+  .hero-title{
+    font-size:clamp(2.05rem,1.5rem + 2.6vw,3.4rem);
+    line-height:1.32;
+    color:var(--gray-900);
+    margin-top:20px;
+  }
+  .hero-title .accent{
+    background:linear-gradient(90deg,var(--green-600),var(--green-900));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .hero-desc{
+    margin-top:22px;font-size:clamp(1rem,.95rem + .3vw,1.1875rem);
+    color:var(--gray-700); line-height:1.9; max-width:52ch;
+  }
+
+  /* pricing is one premium component: price-stack + badge side by side */
+  .hero-price{
+    position:relative;
+    margin-top:40px;
+    display:flex;
+    align-items:center;
+    gap:24px;
+    animation:price-fade-in .9s var(--ease) .2s both;
+  }
+  @keyframes price-fade-in{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+  @media(prefers-reduced-motion:reduce){.hero-price{animation:none;}}
+
+  .hero-price-stack{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:10px;}
+  .hero-price-stack::before{
+    content:'';position:absolute;inset:-24px -28px;
+    background:radial-gradient(ellipse 65% 65% at 32% 45%, rgba(9,201,87,.22), transparent 72%);
+    filter:blur(6px);z-index:-1;pointer-events:none;
+  }
+
+  /* old price — hero-scoped: bigger, higher-contrast, unmistakable red strike */
+  .hero-price .price-old{
+    position:relative;display:inline-block;
+    font-size:1.75rem;font-weight:700;
+    color:var(--gray-600);text-decoration:none;
+  }
+  .hero-price .price-old::after{
+    content:'';position:absolute;left:-7%;right:-7%;top:52%;height:4px;
+    background:linear-gradient(90deg, rgba(220,38,38,0), #dc2626 10%, #ef4444 50%, #dc2626 90%, rgba(220,38,38,0));
+    transform:translateY(-50%) rotate(-8deg);
+    border-radius:4px;
+    box-shadow:0 0 12px rgba(220,38,38,.55);
+  }
+
+  .hero-price .price-new .num{
+    font-size:clamp(2.75rem,2.1rem + 2vw,3.9rem);
+    color:var(--green-600);
+    filter:drop-shadow(0 0 30px rgba(9,201,87,.4));
+  }
+  .hero-price .price-new .cur{color:var(--green-700);}
+
+  /* premium offer badge — now lives inside the pricing component itself,
+     to the left of the price stack, vertically centered with it. */
+  .hero-offer-badge{
+    position:relative;flex-shrink:0;z-index:2;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:12px 20px;border-radius:16px;
+    background:linear-gradient(135deg,var(--green-500),var(--green-800));
+    border:2px solid rgba(255,255,255,.85);
+    box-shadow:0 16px 34px -8px rgba(6,85,45,.45), inset 0 0 0 1px rgba(255,214,102,.2), 0 0 26px rgba(255,214,102,.22);
+    transform:rotate(-4deg);
+    animation:badge-float 4.5s ease-in-out infinite;
+  }
+  .hero-offer-badge-main{font-size:1.125rem;font-weight:700;color:#ffdd7a;text-shadow:0 1px 2px rgba(4,20,10,.4), 0 0 18px rgba(255,214,102,.6);white-space:nowrap;}
+  .hero-offer-badge-sub{display:flex;align-items:center;gap:5px;margin-top:3px;font-size:.6875rem;font-weight:600;color:#ffffff;white-space:nowrap;}
+  .hero-offer-badge-sub .pulse-dot{width:5px;height:5px;border-radius:50%;background:#ffd666;box-shadow:0 0 6px #ffd666;flex-shrink:0;}
+  @keyframes badge-float{0%,100%{transform:rotate(-4deg) translateY(0);}50%{transform:rotate(-2deg) translateY(-6px);}}
+  @media(prefers-reduced-motion:reduce){.hero-offer-badge{animation:none;}}
+  @media(max-width:480px){
+    .hero-price{flex-direction:column;align-items:flex-start;gap:16px;}
+    .hero-offer-badge{order:-1;padding:10px 18px;}
+  }
+
+  .price-badge{
+    display:inline-flex;align-items:center;gap:7px;
+    background:rgba(9,201,87,.12);border:1px solid rgba(9,201,87,.3);
+    color:var(--green-300);font-size:.8125rem;font-weight:600;
+    padding:6px 14px;border-radius:var(--radius-full);
+    margin-inline-start:2px;
+  }
+  .price-badge .pulse{width:7px;height:7px;border-radius:50%;background:var(--green-400);position:relative;flex-shrink:0;}
+  .price-badge .pulse::after{
+    content:'';position:absolute;inset:-4px;border-radius:50%;border:1.5px solid var(--green-400);
+    animation:pulse-ring 1.8s var(--ease) infinite;
+  }
+  @keyframes pulse-ring{0%{transform:scale(.6);opacity:1;}100%{transform:scale(2.2);opacity:0;}}
+
+  .hero-sub{margin-top:16px;display:flex;align-items:center;gap:8px;color:var(--gray-700);font-size:.9375rem;font-weight:500;}
+  .hero-sub .icon{color:var(--green-600);flex-shrink:0;}
+
+  .hero-cta{margin-top:34px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
+  .hero-cta-note{font-size:.8125rem;color:#7d8a83;}
+
+  /* premium shine sweep — hero's CTA and the repeated section CTAs
+     share this exact treatment; nav/final-cta buttons are unaffected */
+  .hero .btn-primary, .section-cta .btn-primary{position:relative;overflow:hidden;}
+  .hero .btn-primary::before, .section-cta .btn-primary::before{
+    content:'';position:absolute;inset:0;
+    background:linear-gradient(120deg, transparent 35%, rgba(255,255,255,.4) 48%, transparent 62%);
+    transform:translateX(-130%);
+    transition:transform .75s var(--ease);
+    pointer-events:none;
+  }
+  .hero .btn-primary:hover::before, .section-cta .btn-primary:hover::before{transform:translateX(130%);}
+
+  /* repeated conversion CTA placed after each major section */
+  .section-cta{display:flex;justify-content:center;margin-top:46px;}
+
+  /* ---- hero dashboard visual — light, Salla-merchant-inspired panel ---- */
+  .hero-visual{position:relative;perspective:1400px;}
+  .dash-card{
+    position:relative;
+    background:linear-gradient(180deg, #ffffff, #fbfdfc);
+    border:1px solid var(--border-light);
+    border-radius:var(--radius-xl);
+    padding:26px;
+    box-shadow:0 30px 70px rgba(9,30,20,.16), 0 10px 26px rgba(9,30,20,.08), 0 0 0 1px rgba(9,201,87,.06);
+    transform:rotateY(-8deg) rotateX(4deg);
+    transform-style:preserve-3d;
+    transition:transform .5s var(--ease);
+    will-change:transform;
+  }
+  @media(max-width:1049px){.dash-card{transform:none;}}
+
+  .dash-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+  .dash-head-title{display:flex;align-items:center;gap:8px;color:var(--gray-900);font-weight:700;font-size:.9375rem;}
+  .dash-head-title .dot{width:8px;height:8px;border-radius:50%;background:var(--green-500);box-shadow:0 0 10px rgba(9,201,87,.6);}
+  .dash-live{display:flex;align-items:center;gap:6px;font-size:.75rem;color:var(--green-700);background:var(--green-50);border:1px solid var(--green-100);padding:4px 10px;border-radius:var(--radius-full);}
+  .dash-live .pulse{width:6px;height:6px;border-radius:50%;background:var(--green-500);animation:blink 1.6s ease-in-out infinite;}
+  @keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+
+  .kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:18px;}
+  .kpi-tile{
+    background:var(--gray-50);border:1px solid var(--border-light);
+    border-radius:var(--radius-md);padding:12px 10px;
+  }
+  .kpi-tile .label{font-size:.625rem;color:var(--gray-600);margin-bottom:7px;font-weight:600;}
+  .kpi-tile .value{font-size:1rem;font-weight:700;color:var(--gray-900);font-variant-numeric:tabular-nums;}
+  .kpi-tile .delta{display:flex;align-items:center;gap:3px;font-size:.625rem;font-weight:700;color:var(--green-600);margin-top:5px;}
+  .kpi-ring{position:relative;width:30px;height:30px;border-radius:50%;background:conic-gradient(var(--green-500) 0% 34%, var(--gray-200) 34% 100%);margin-bottom:5px;}
+  .kpi-ring::after{content:'';position:absolute;inset:5px;border-radius:50%;background:var(--gray-50);}
+  @media(max-width:540px){
+    .kpi-row{grid-template-columns:repeat(2,1fr);gap:8px;}
+    .dash-card{padding:18px;}
+  }
+
+  .chart-panel{background:var(--gray-50);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:16px 16px 10px;margin-bottom:16px;}
+  .chart-panel .chart-legend{display:flex;gap:16px;font-size:.75rem;color:var(--gray-600);margin-bottom:6px;font-weight:600;}
+  .chart-panel .chart-legend span{display:inline-flex;align-items:center;gap:6px;}
+  .chart-panel .chart-legend i{width:10px;height:2.5px;border-radius:2px;display:inline-block;}
+  .months-row{display:flex;justify-content:space-between;font-size:.625rem;color:var(--gray-500);padding:0 4px;margin-top:4px;}
+
+  /* recent orders — the "feels like Salla" touch */
+  .orders-panel{border:1px solid var(--border-light);border-radius:var(--radius-md);overflow:hidden;}
+  .orders-panel-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--gray-50);border-bottom:1px solid var(--border-light);}
+  .orders-panel-head span{font-size:.75rem;font-weight:700;color:var(--gray-800);}
+  .orders-panel-head b{font-size:.6875rem;font-weight:600;color:var(--green-700);}
+  .order-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border-light);}
+  .order-row:last-child{border-bottom:none;}
+  .order-icon{width:30px;height:30px;border-radius:var(--radius-sm);background:var(--green-50);border:1px solid var(--green-100);display:grid;place-items:center;color:var(--green-700);flex-shrink:0;}
+  .order-info{flex:1;min-width:0;}
+  .order-info .order-title{font-size:.75rem;font-weight:700;color:var(--gray-900);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .order-info .order-sub{font-size:.6875rem;color:var(--gray-500);margin-top:2px;}
+  .order-amount{font-size:.8125rem;font-weight:700;color:var(--gray-900);font-variant-numeric:tabular-nums;flex-shrink:0;}
+  .status-pill{font-size:.625rem;font-weight:700;padding:3px 9px;border-radius:var(--radius-full);flex-shrink:0;white-space:nowrap;margin-inline-start:6px;}
+  .status-pill.done{background:var(--green-50);color:var(--green-700);}
+  .status-pill.shipping{background:#fff7e6;color:#a16207;}
+  @media(max-width:540px){
+    .order-row{padding:9px 12px;gap:8px;}
+    .order-icon{width:26px;height:26px;}
+    .order-info .order-title{font-size:.6875rem;}
+    .order-amount{font-size:.75rem;}
+    .status-pill{font-size:.5625rem;padding:2px 7px;margin-inline-start:4px;}
+  }
+
+  .floating-chip{
+    position:absolute;
+    background:rgba(255,255,255,.95);
+    border:1px solid var(--border-light);
+    border-radius:var(--radius-md);
+    padding:12px 16px;
+    backdrop-filter:blur(14px);
+    box-shadow:0 20px 40px rgba(9,30,20,.14), 0 4px 12px rgba(9,30,20,.06);
+    display:flex;align-items:center;gap:10px;
+    animation:float 5s ease-in-out infinite;
+  }
+  .chip-1{top:-24px;left:-18px;animation-delay:0s;}
+  .chip-2{bottom:6px;right:-22px;animation-delay:1.2s;}
+  @media(max-width:640px){.floating-chip{display:none;}}
+  @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+  .chip-label{font-size:.6875rem;color:var(--gray-600);}
+  .chip-value{font-size:.9375rem;font-weight:700;color:var(--gray-900);}
+  .chip-value.up{color:var(--green-600);}
+
+  /* ============================================================
+     FLOATING SECTION CARDS — every section is now an inset card
+     floating on the white page; dark gradients live inside the
+     card, not the page background.
+     ============================================================ */
+  .floating-card{
+    position:relative;
+    border-radius:var(--radius-2xl);
+    border:1px solid var(--border-light);
+    box-shadow:var(--shadow-xl);
+    padding:76px 56px;
+  }
+  .floating-card.light{background:var(--white);}
+  .floating-card.tint{background:var(--gray-50);}
+  .floating-card.dark{
+    background:linear-gradient(160deg, var(--bg-dark) 0%, var(--green-950) 145%);
+    border-color:rgba(255,255,255,.08);
+    box-shadow:var(--shadow-card-dark);
+    overflow:hidden;
+    text-align:center;
+  }
+  @media(max-width:1049px){.floating-card{padding:56px 32px;}}
+  @media(max-width:640px){.floating-card{padding:40px 22px;border-radius:var(--radius-xl);}}
+
+  /* ============================================================
+     PAIN POINTS (section 2)
+     ============================================================ */
+  .pains{padding:28px 0;background:transparent;}
+
+  /* highlighted phrase inside the section intro paragraph */
+  .pain-highlight{
+    color:var(--green-700);font-weight:700;
+    white-space:nowrap;
+  }
+
+  /* perfectly balanced 2-column x 3-row grid — every card identical */
+  .pain-grid{display:grid;grid-template-columns:1fr;gap:18px;}
+  @media(min-width:640px){.pain-grid{grid-template-columns:repeat(2,1fr);gap:20px;}}
+
+  .pain-card{
+    background:linear-gradient(155deg, rgba(192,74,46,.035), rgba(192,74,46,.012) 55%, rgba(192,74,46,0) 100%), var(--white);
+    border:1px solid var(--border-light);
+    border-radius:var(--radius-lg);
+    padding:17px 28px;
+    min-height:96px;
+    display:flex;align-items:center;gap:18px;
+    transition:transform .4s var(--ease), box-shadow .4s var(--ease), border-color .4s var(--ease), background .4s var(--ease);
+  }
+  .pain-card:hover{
+    transform:translateY(-6px);
+    box-shadow:var(--shadow-lg);
+    border-color:var(--warn-100);
+    background:linear-gradient(155deg, rgba(192,74,46,.07), rgba(192,74,46,.025) 55%, rgba(192,74,46,0) 100%), var(--white);
+  }
+  @media(max-width:480px){.pain-card{padding:14px 20px;gap:14px;min-height:0;}}
+
+  .icon-chip{
+    width:48px;height:48px;flex-shrink:0;border-radius:var(--radius-sm);
+    background:linear-gradient(155deg,var(--warn-50),var(--white));
+    border:1px solid var(--warn-100);
+    display:grid;place-items:center;color:var(--warn-600);
+    transition:background .4s var(--ease), transform .4s var(--ease);
+  }
+  .pain-card:hover .icon-chip{transform:scale(1.06) rotate(3deg);background:linear-gradient(155deg,var(--warn-100),var(--warn-50));}
+  @media(max-width:480px){.icon-chip{width:42px;height:42px;}}
+  .pain-card p{font-size:1.0625rem;font-weight:600;color:var(--gray-900);line-height:1.6;}
+  @media(max-width:480px){.pain-card p{font-size:1rem;line-height:1.55;}}
+
+  /* ============================================================
+     PROCESS (section 3)
+     ============================================================ */
+  .process{padding:28px 0;background:transparent;}
+  .process-intro{max-width:680px;margin:0 auto 64px;text-align:center;}
+  .process-intro h2{font-size:clamp(1.75rem,1.35rem + 1.9vw,2.625rem);line-height:1.28;margin-top:16px;}
+  .process-intro .lead{margin-top:18px;font-size:1.0625rem;line-height:1.9;}
+  .process-intro .muted{color:var(--gray-600);}
+  .process-intro .strong{color:var(--gray-900);font-weight:600;display:block;margin-top:4px;}
+
+  /* ---- interactive journey: track, connectors, steps (mobile-first) ---- */
+  .process-track{position:relative;margin-top:8px;}
+
+  .process-connectors{display:none;}
+  @media(min-width:1000px){
+    .process-connectors{
+      display:flex;position:absolute;top:0;left:10%;right:10%;height:3px;
+      transform:translateY(-50%);z-index:0;pointer-events:none;
+    }
+  }
+  .connector-seg{flex:1;position:relative;height:3px;background:var(--gray-200);border-radius:2px;margin-inline:3px;overflow:hidden;}
+  .connector-fill{
+    position:absolute;inset:0;border-radius:2px;
+    background:linear-gradient(90deg,var(--green-400),var(--green-700));
+    transform:scaleX(0);transform-origin:right center;
+    transition:transform .55s var(--ease);
+  }
+  .connector-seg.is-filled .connector-fill{transform:scaleX(1);}
+
+  .process-grid{display:flex;flex-direction:column;gap:0;position:relative;z-index:1;}
+  @media(min-width:1000px){
+    .process-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;}
+  }
+
+  .process-step{
+    position:relative;
+    display:flex;align-items:flex-start;gap:18px;
+    padding-bottom:30px;
+    text-align:start;
+  }
+  .process-step:last-child{padding-bottom:0;}
+  .process-step:not(:last-child)::after{
+    content:'';position:absolute;top:52px;bottom:-30px;right:25px;width:2px;
+    background:var(--gray-200);z-index:0;transition:background .5s var(--ease);
+  }
+  .process-step.is-passed:not(:last-child)::after,
+  .process-step.is-active:not(:last-child)::after{
+    background:linear-gradient(180deg,var(--green-500),var(--green-700));
+  }
+  @media(min-width:1000px){
+    .process-step{flex-direction:column;align-items:center;text-align:center;gap:0;padding-bottom:0;}
+    .process-step::after{display:none;}
+  }
+  @media(hover:none){.process-step:active .step-card{transform:scale(.98);}}
+
+  /* default badge — Haseb green gradient, a key visual element even at rest */
+  .step-badge{
+    flex-shrink:0;position:relative;z-index:2;
+    width:50px;height:50px;border-radius:50%;
+    background:linear-gradient(150deg,var(--green-500),var(--green-800));
+    color:var(--white);font-weight:700;font-size:1.0625rem;
+    display:grid;place-items:center;
+    box-shadow:0 8px 20px -6px rgba(6,133,58,.45), 0 0 0 4px rgba(9,201,87,.1);
+    transition:background .28s ease-in-out, box-shadow .28s ease-in-out;
+  }
+  @media(min-width:1000px){
+    .step-badge{position:absolute;top:-26px;left:50%;transform:translateX(-50%);width:52px;height:52px;}
+  }
+  @media(max-width:400px){.step-badge{width:44px;height:44px;font-size:.9375rem;}}
+  .process-step.is-active .step-badge{
+    background:var(--gold-solid);
+    box-shadow:0 8px 18px -6px rgba(0,0,0,.2);
+  }
+
+  /* default card — light Haseb-green glass, alive before any interaction */
+  .step-card{
+    flex:1;min-width:0;width:100%;
+    background:linear-gradient(160deg, rgba(9,201,87,.08), rgba(9,201,87,.02) 70%), var(--white);
+    border:1px solid rgba(9,201,87,.2);
+    border-radius:var(--radius-lg);
+    padding:16px 18px;
+    box-shadow:0 12px 28px -16px rgba(6,133,58,.35), var(--shadow-sm);
+    backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+    transition:transform .28s ease-in-out, box-shadow .28s ease-in-out, border-color .28s ease-in-out, background .28s ease-in-out;
+  }
+  @media(min-width:1000px){.step-card{padding:40px 22px 26px;text-align:center;}}
+  @media(max-width:400px){
+    .step-card{padding:13px 14px;}
+    .process-step{gap:14px;}
+    .step-card p{font-size:.875rem;}
+  }
+  .process-step.is-active .step-card{
+    transform:translateY(-4px) scale(1.015);
+    background:var(--gold-bg);
+    border-color:var(--gold-400);
+    box-shadow:0 16px 34px -14px rgba(20,20,15,.22), var(--shadow-md);
+  }
+
+  .step-card .step-icon{
+    color:var(--green-600);margin-bottom:10px;display:inline-flex;
+    transition:color .28s ease-in-out;
+  }
+  .step-card .step-icon svg{width:25px;height:25px;}
+  .process-step.is-active .step-icon{color:var(--gold-solid);}
+  @media(min-width:1000px){.step-card .step-icon{display:flex;justify-content:center;}}
+
+  .step-card p{font-size:.9375rem;font-weight:600;line-height:1.6;color:var(--gray-900);}
+
+  /* staggered reveal: fade + rise + slight scale, 150ms cadence */
+  .process-step[data-reveal]{transform:translateY(24px) scale(.94);}
+  .process-step[data-reveal].in-view{transform:translateY(0) scale(1);}
+  .process-step[data-reveal-delay="1"]{transition-delay:.15s;}
+  .process-step[data-reveal-delay="2"]{transition-delay:.3s;}
+  .process-step[data-reveal-delay="3"]{transition-delay:.45s;}
+  .process-step[data-reveal-delay="4"]{transition-delay:.6s;}
+
+  /* ============================================================
+     WHY HASEB (section 4) — two-reality comparison
+     ============================================================ */
+  .why{padding:28px 0;background:transparent;}
+
+  .why-intro{max-width:700px;margin:0 auto 48px;text-align:center;}
+  .why-intro .line-1{display:block;font-size:1.0625rem;line-height:1.85;color:var(--gray-600);}
+  .why-intro .line-2{display:block;margin-top:10px;font-size:1.125rem;line-height:1.85;font-weight:600;color:var(--gray-900);}
+  .why-highlight{color:var(--green-700);font-weight:700;}
+
+  .compare-grid{display:grid;grid-template-columns:1fr;gap:20px;}
+  @media(min-width:800px){.compare-grid{grid-template-columns:repeat(2,1fr);gap:24px;}}
+
+  .compare-card{
+    position:relative;
+    border-radius:var(--radius-xl);
+    padding:32px 30px;
+    backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+    transition:transform .4s var(--ease), box-shadow .4s var(--ease), border-color .4s var(--ease);
+  }
+  @media(max-width:480px){.compare-card{padding:24px 22px;}}
+  .compare-card.negative{
+    background:linear-gradient(160deg, rgba(192,74,46,.07), rgba(192,74,46,.015) 65%);
+    border:1px solid rgba(192,74,46,.18);
+    box-shadow:0 20px 50px -18px rgba(160,60,36,.22);
+  }
+  .compare-card.negative:hover{
+    transform:translateY(-6px);
+    box-shadow:0 30px 64px -18px rgba(160,60,36,.32);
+    border-color:rgba(192,74,46,.32);
+  }
+  .compare-card.positive{
+    background:linear-gradient(160deg, rgba(9,201,87,.09), rgba(9,201,87,.015) 65%);
+    border:1px solid rgba(9,201,87,.22);
+    box-shadow:0 20px 50px -18px rgba(6,120,60,.2);
+  }
+  .compare-card.positive:hover{
+    transform:translateY(-6px);
+    box-shadow:0 30px 64px -18px rgba(6,120,60,.3);
+    border-color:rgba(9,201,87,.4);
+  }
+
+  .compare-head h3{font-size:1.375rem;line-height:1.4;}
+  .compare-card.negative .compare-head h3{color:var(--warn-700);}
+  .compare-card.positive .compare-head h3{color:var(--green-800);}
+  .compare-head p{margin-top:10px;font-size:.9375rem;line-height:1.75;color:var(--gray-700);}
+
+  .compare-divider{height:1px;margin:22px 0;}
+  .compare-card.negative .compare-divider{background:rgba(192,74,46,.16);}
+  .compare-card.positive .compare-divider{background:rgba(9,201,87,.2);}
+
+  .compare-rows{display:flex;flex-direction:column;}
+  .compare-row{
+    display:flex;align-items:center;gap:14px;
+    padding:12px 0;
+    border-bottom:1px solid transparent;
+  }
+  .compare-card.negative .compare-row{border-bottom-color:rgba(192,74,46,.1);}
+  .compare-card.positive .compare-row{border-bottom-color:rgba(9,201,87,.13);}
+  .compare-row:last-child{border-bottom:none;padding-bottom:0;}
+  .compare-row:first-child{padding-top:0;}
+  @media(max-width:400px){
+    .compare-card{padding:20px 16px;}
+    .compare-row{align-items:flex-start;gap:10px;}
+    .compare-row p{font-size:.875rem;}
+  }
+  .compare-row p{font-size:.9375rem;font-weight:600;line-height:1.6;color:var(--gray-900);}
+
+  .compare-icon{
+    width:38px;height:38px;flex-shrink:0;border-radius:var(--radius-sm);
+    display:grid;place-items:center;
+    transition:transform .35s var(--ease), background .35s var(--ease);
+  }
+  .compare-card.negative .compare-icon{background:var(--warn-50);border:1px solid var(--warn-100);color:var(--warn-600);}
+  .compare-card.positive .compare-icon{background:var(--green-50);border:1px solid var(--green-100);color:var(--green-700);}
+  .compare-row:hover .compare-icon{transform:scale(1.1);}
+  .compare-card.negative .compare-row:hover .compare-icon{background:var(--warn-100);}
+  .compare-card.positive .compare-row:hover .compare-icon{background:var(--green-100);}
+  @media(max-width:400px){.compare-icon{width:32px;height:32px;margin-top:1px;}}
+
+  /* ============================================================
+     PARTNERS (section 5)
+     ============================================================ */
+  .partners{padding:28px 0;background:transparent;}
+  /* this section reads tall mostly because of the shared floating-card's
+     generous vertical padding and section-head gap — trim both here
+     without touching the shared class used by the other sections */
+  .partners .floating-card{padding-top:42px;padding-bottom:42px;}
+  .partners .section-head{margin-bottom:26px;}
+  @media(max-width:1049px){.partners .floating-card{padding-top:34px;padding-bottom:34px;}}
+  @media(max-width:640px){.partners .floating-card{padding-top:26px;padding-bottom:26px;}}
+
+  /* infinite two-row logo cloud, generated from /clients */
+  .logo-marquee{display:flex;flex-direction:column;gap:12px;margin-top:4px;}
+  .logo-row{
+    overflow:hidden;position:relative;
+    mask-image:linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+    -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  }
+  /* seamless marquee — ONE flat track per row, holding that row's full
+     logo sequence repeated 4x back-to-back (never a single list of
+     cards). Only the track is animated, never individual cards. It
+     travels exactly 1/4 of its own width — one full sequence — before
+     the keyframe loops; repeat #2 is pixel-identical to repeat #1, so
+     the loop is invisible. Row A moves right-to-left (-25%), row B
+     left-to-right (+25%); hover-pause is plain animation-play-state,
+     no JS anywhere in this component. */
+  .logo-track{
+    display:flex;gap:0;width:max-content;will-change:transform;
+    animation:logo-scroll-a 40s linear infinite;
+  }
+  #logoTrackB{animation-name:logo-scroll-b;}
+  .logo-row:hover .logo-track{animation-play-state:paused;}
+  @keyframes logo-scroll-a{from{transform:translateX(0);}to{transform:translateX(-25%);}}
+  @keyframes logo-scroll-b{from{transform:translateX(0);}to{transform:translateX(25%);}}
+  .logo-set{display:flex;gap:16px;padding-inline-end:16px;flex-shrink:0;}
+  .logo-card{
+    flex-shrink:0;
+    width:196px;height:128px;
+    background:var(--white);
+    border:1px solid var(--border-light);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-sm);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:14px 16px 12px;
+    transition:transform .35s var(--ease), box-shadow .35s var(--ease), border-color .35s var(--ease);
+  }
+  .logo-img-wrap{flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center;}
+  .logo-card img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;transition:transform .35s var(--ease);}
+  .logo-card:hover{
+    transform:translateY(-4px);
+    border-color:var(--green-300);
+    box-shadow:var(--shadow-md);
+  }
+  .logo-card:hover img{transform:scale(1.06);}
+
+  /* industry-category badge — context only, never competes with the logo */
+  .logo-badge{
+    display:inline-flex;align-items:center;
+    margin-top:8px;max-width:100%;
+    padding:4px 10px;border-radius:var(--radius-full);
+    background:var(--green-50);color:var(--green-700);
+    font-size:.625rem;font-weight:600;line-height:1.4;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    transition:background .35s var(--ease);
+  }
+  .logo-card:hover .logo-badge{background:var(--green-100);}
+
+  @media(max-width:900px){
+    .logo-card{width:176px;height:120px;padding:12px 14px 10px;}
+    .logo-badge{font-size:.5625rem;padding:3px 9px;}
+  }
+  @media(max-width:560px){
+    .logo-card{width:158px;height:110px;padding:10px 12px 9px;}
+    .logo-set{gap:12px;padding-inline-end:12px;}
+    .logo-badge{font-size:.5rem;padding:3px 8px;margin-top:6px;}
+    .logo-marquee{gap:10px;}
+  }
+  @media(prefers-reduced-motion:reduce){.logo-track{animation:none;}}
+
+  /* ============================================================
+     FINAL CTA (section 6)
+     ============================================================ */
+  .final-cta{
+    background:transparent;
+    padding:28px 0 52px;
+  }
+  .final-glow{
+    position:absolute;inset:0;pointer-events:none;
+    background:
+      radial-gradient(ellipse 800px 500px at 50% 100%, rgba(9,201,87,.22), transparent 60%),
+      radial-gradient(ellipse 600px 400px at 15% 0%, rgba(4,84,36,.28), transparent 60%);
+  }
+  .final-cta h2{
+    font-size:clamp(2rem,1.5rem + 2.2vw,3rem);color:var(--white);line-height:1.32;
+    max-width:16ch;margin:20px auto 0;
+  }
+  .final-cta .desc{
+    max-width:52ch;margin:22px auto 0;color:#b9c2bd;font-size:1.0625rem;line-height:1.9;
+  }
+  .final-price{margin:38px auto 0;display:inline-flex;align-items:flex-end;gap:14px;flex-wrap:wrap;justify-content:center;}
+  .final-cta .hero-cta{justify-content:center;margin-top:38px;}
+
+  /* ============================================================
+     FOOTER
+     ============================================================ */
+  .footer{background:var(--bg-dark-2);padding:40px 0;border-top:1px solid rgba(255,255,255,.06);}
+  .footer .container{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;}
+  .footer img{height:34px;opacity:.9;}
+  .footer .tagline{font-size:.8125rem;color:#8f9993;}
+  .footer .rights{font-size:.8125rem;color:#5f6862;}
+
+  /* ============================================================
+     FLOATING CONTACT WIDGET
+     ============================================================ */
+  .contact-widget-outer{
+    position:fixed;left:24px;bottom:24px;z-index:90;
+    animation:widget-entrance .6s var(--ease) both;
+  }
+  @media(max-width:640px){.contact-widget-outer{left:16px;bottom:16px;}}
+  @keyframes widget-entrance{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+
+  .contact-widget{
+    display:flex;flex-direction:column;gap:12px;
+    padding:10px;
+    background:rgba(255,255,255,.78);
+    backdrop-filter:blur(18px) saturate(1.3);-webkit-backdrop-filter:blur(18px) saturate(1.3);
+    border:1px solid rgba(43,43,43,.08);
+    border-radius:18px;
+    box-shadow:0 22px 46px rgba(10,15,13,.16), 0 6px 16px rgba(10,15,13,.08);
+    animation:widget-float 4s ease-in-out infinite;
+    animation-delay:.6s;
+  }
+  @keyframes widget-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
+  @media(prefers-reduced-motion:reduce){
+    .contact-widget-outer{animation:none;}
+    .contact-widget{animation:none;}
+  }
+
+  .contact-btn{
+    position:relative;
+    width:56px;height:56px;border-radius:50%;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 8px 20px -6px rgba(10,15,13,.3);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .contact-btn svg{width:24px;height:24px;}
+  .contact-btn:hover{transform:translateY(-5px) scale(1.06);box-shadow:0 16px 30px -8px rgba(10,15,13,.36);}
+  .contact-call{background:linear-gradient(135deg,var(--green-500),var(--green-800));color:var(--white);}
+  .contact-whatsapp{background:#25d366;color:var(--white);}
+  @media(max-width:640px){
+    .contact-btn{width:50px;height:50px;}
+    .contact-btn svg{width:21px;height:21px;}
+  }
+
+  .contact-tooltip{
+    position:absolute;left:calc(100% + 12px);top:50%;
+    transform:translateY(-50%) translateX(-6px);
+    background:var(--ink);color:var(--white);
+    font-size:.75rem;font-weight:600;
+    padding:6px 12px;border-radius:8px;
+    white-space:nowrap;
+    opacity:0;pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+  }
+  .contact-btn:hover .contact-tooltip{opacity:1;transform:translateY(-50%) translateX(0);}
+  @media(hover:none){.contact-tooltip{display:none;}}
+
+  /* ============================================================
+     ICONS
+     ============================================================ */
+  .icon{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;}
+  .icon-sm{width:16px;height:16px;stroke-width:2;}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     SVG ICON SPRITE
+     ============================================================ -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<defs>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="10,7 5,12 10,17"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><polyline points="5,12.5 9.5,17 19,6.5"/></symbol>
+
+  <!-- pain points -->
+  <symbol id="i-leak" viewBox="0 0 24 24">
+    <rect x="4" y="12" width="3.4" height="8" rx="1"/>
+    <rect x="10.3" y="7" width="3.4" height="13" rx="1"/>
+    <rect x="16.6" y="3" width="3.4" height="17" rx="1"/>
+    <polyline points="3,7 9,10.5 14,15 21,18" stroke-dasharray="2.6 3" opacity=".55"/>
+  </symbol>
+  <symbol id="i-flow-q" viewBox="0 0 24 24">
+    <circle cx="4.5" cy="5.5" r="1.5"/><circle cx="4.5" cy="12" r="1.5"/><circle cx="4.5" cy="18.5" r="1.5"/>
+    <line x1="6" y1="5.5" x2="11.5" y2="11"/><line x1="6" y1="12" x2="11.5" y2="12"/><line x1="6" y1="18.5" x2="11.5" y2="13"/>
+    <text x="13.5" y="17" font-size="10" font-weight="700" fill="currentColor" stroke="none" font-family="Expo Arabic, sans-serif">؟</text>
+  </symbol>
+  <symbol id="i-tag-q" viewBox="0 0 24 24">
+    <rect x="4" y="9" width="13" height="10" rx="2"/>
+    <circle cx="10.5" cy="6" r="1.4"/><line x1="10.5" y1="7.4" x2="10.5" y2="9"/>
+    <text x="7.3" y="16.5" font-size="8.5" font-weight="700" fill="currentColor" stroke="none" font-family="Expo Arabic, sans-serif">؟</text>
+  </symbol>
+  <symbol id="i-mega" viewBox="0 0 24 24">
+    <path d="M3 10.5v3a1 1 0 0 0 1 1h1.6l6.4 3.6V5.9L5.6 9.5H4a1 1 0 0 0-1 1Z"/>
+    <path d="M12.7 8.2c1.1 1 1.1 5.6 0 6.6" opacity=".6"/>
+    <circle cx="19.5" cy="7" r="2.3"/><line x1="18.2" y1="7" x2="20.8" y2="7"/>
+  </symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24">
+    <path d="M6.5 3h7l4 4v13a1 1 0 0 1-1 1h-10a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/>
+    <path d="M13.5 3v4h4"/>
+    <polyline points="7.5,14.5 9.5,11.5 11.5,14.5 13.5,11.5 15.5,14.5 17,12.2"/>
+  </symbol>
+
+  <!-- pain points: warning-toned icons -->
+  <symbol id="i-chart-down" viewBox="0 0 24 24">
+    <rect x="3.5" y="13" width="3.2" height="7" rx="1" opacity=".4"/>
+    <rect x="9" y="8" width="3.2" height="12" rx="1" opacity=".4"/>
+    <rect x="14.5" y="4.5" width="3.2" height="15.5" rx="1" opacity=".4"/>
+    <line x1="4" y1="5.5" x2="19.5" y2="16.5"/>
+    <polyline points="19.5,9.5 19.5,16.5 12.5,16.5"/>
+  </symbol>
+  <symbol id="i-wallet-leak" viewBox="0 0 24 24">
+    <rect x="3.5" y="7" width="15" height="11" rx="2.5"/>
+    <path d="M3.5 10.7h15"/>
+    <circle cx="14.7" cy="13" r="1.5"/>
+    <path d="M7.2 18.3c-.6 1.4-.6 2.4 0 3.1" stroke-dasharray="1.8 1.8"/>
+    <circle cx="6.5" cy="22.1" r=".9" fill="currentColor" stroke="none"/>
+  </symbol>
+  <symbol id="i-mega-warn" viewBox="0 0 24 24">
+    <path d="M3 10.5v3a1 1 0 0 0 1 1h1.6l6.4 3.6V5.9L5.6 9.5H4a1 1 0 0 0-1 1Z"/>
+    <path d="M12.7 8.2c1.1 1 1.1 5.6 0 6.6" opacity=".6"/>
+    <path d="M18.3 4.2 22 10H14.6Z"/>
+    <text x="17.6" y="9.1" font-size="6" font-weight="700" fill="currentColor" stroke="none" font-family="Expo Arabic, sans-serif">!</text>
+  </symbol>
+  <symbol id="i-chart-warn" viewBox="0 0 24 24">
+    <rect x="3" y="14" width="3.2" height="6.5" rx="1"/>
+    <rect x="9" y="9" width="3.2" height="11.5" rx="1"/>
+    <rect x="15" y="12.5" width="3.2" height="8" rx="1"/>
+    <path d="M18.3 3.6 22 9.4H14.6Z"/>
+    <text x="17.6" y="8.5" font-size="5.5" font-weight="700" fill="currentColor" stroke="none" font-family="Expo Arabic, sans-serif">!</text>
+  </symbol>
+  <symbol id="i-receipt-warn" viewBox="0 0 24 24">
+    <rect x="5" y="3" width="14" height="18" rx="1.5"/>
+    <line x1="8" y1="7.5" x2="16" y2="7.5"/>
+    <line x1="8" y1="11" x2="16" y2="11"/>
+    <line x1="8" y1="14.5" x2="12.5" y2="14.5"/>
+    <circle cx="16.3" cy="17.3" r="3" opacity=".12" fill="currentColor" stroke="none"/>
+    <text x="14.4" y="19.2" font-size="6" font-weight="700" fill="currentColor" stroke="none" font-family="Expo Arabic, sans-serif">!</text>
+  </symbol>
+
+  <!-- why-haseb comparison icons -->
+  <symbol id="i-clock" viewBox="0 0 24 24">
+    <circle cx="12" cy="12" r="8.5"/>
+    <path d="M12 7v5l3.5 2"/>
+  </symbol>
+  <symbol id="i-percent" viewBox="0 0 24 24">
+    <circle cx="7.5" cy="7.5" r="2.2"/>
+    <circle cx="16.5" cy="16.5" r="2.2"/>
+    <line x1="18" y1="6" x2="6" y2="18"/>
+  </symbol>
+  <symbol id="i-checklist" viewBox="0 0 24 24">
+    <rect x="5" y="4" width="14" height="17" rx="2"/>
+    <rect x="9" y="2.3" width="6" height="3" rx="1"/>
+    <polyline points="8,11.3 10,13.3 14.5,8.8"/>
+    <line x1="8" y1="17" x2="16" y2="17"/>
+  </symbol>
+  <symbol id="i-doc-check" viewBox="0 0 24 24">
+    <path d="M6.5 3h7l4 4v13a1 1 0 0 1-1 1h-10a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/>
+    <path d="M13.5 3v4h4"/>
+    <polyline points="8,13.5 10.2,15.7 16,10"/>
+  </symbol>
+  <symbol id="i-receipt-check" viewBox="0 0 24 24">
+    <rect x="5" y="3" width="14" height="18" rx="1.5"/>
+    <line x1="8" y1="7.5" x2="16" y2="7.5"/>
+    <line x1="8" y1="11" x2="16" y2="11"/>
+    <polyline points="8,15.3 10,17.3 16,14.3"/>
+  </symbol>
+  <symbol id="i-mega-check" viewBox="0 0 24 24">
+    <path d="M3 10.5v3a1 1 0 0 0 1 1h1.6l6.4 3.6V5.9L5.6 9.5H4a1 1 0 0 0-1 1Z"/>
+    <path d="M12.7 8.2c1.1 1 1.1 5.6 0 6.6" opacity=".6"/>
+    <circle cx="19" cy="6.7" r="3"/>
+    <polyline points="17.5,6.7 18.6,7.8 20.7,5.5"/>
+  </symbol>
+
+  <!-- process -->
+  <symbol id="i-search" viewBox="0 0 24 24">
+    <circle cx="10.2" cy="10.2" r="6.2"/><line x1="14.6" y1="14.6" x2="20.5" y2="20.5"/>
+    <line x1="7.5" y1="11.5" x2="7.5" y2="9"/><line x1="10.2" y1="11.5" x2="10.2" y2="7"/><line x1="12.9" y1="11.5" x2="12.9" y2="8.3"/>
+  </symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24">
+    <line x1="5.5" y1="3" x2="5.5" y2="21"/>
+    <path d="M5.5 4.2h13l-3 3.9 3 3.9h-13Z"/>
+  </symbol>
+  <symbol id="i-trend" viewBox="0 0 24 24">
+    <polyline points="4,17 9.5,10.8 13.2,14 20,5.2"/>
+    <polyline points="14.8,5.2 20,5.2 20,10.4"/>
+  </symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24">
+    <rect x="3" y="5" width="18" height="12" rx="3"/>
+    <path d="M8 17v3.2l3.4-3.2"/>
+    <text x="9.3" y="14" font-size="9" font-weight="700" fill="currentColor" stroke="none" font-family="Expo Arabic, sans-serif">؟</text>
+  </symbol>
+  <symbol id="i-badge" viewBox="0 0 24 24">
+    <path d="M12 3.2 18.5 6v6c0 5-2.8 7.9-6.5 8.9C8.3 19.9 5.5 17 5.5 12V6Z"/>
+    <polyline points="8.8,12.3 11,14.6 15.4,9.6"/>
+  </symbol>
+
+  <!-- why haseb -->
+  <symbol id="i-cross-app" viewBox="0 0 24 24">
+    <rect x="7" y="7" width="10" height="10" rx="2"/>
+    <line x1="9.3" y1="10.4" x2="14.7" y2="10.4"/>
+    <circle cx="12" cy="12" r="9.5" opacity=".9"/>
+    <line x1="5.2" y1="18.8" x2="18.8" y2="5.2"/>
+  </symbol>
+  <symbol id="i-cross-chat" viewBox="0 0 24 24">
+    <rect x="6" y="8" width="12" height="8.5" rx="2.5"/>
+    <path d="M9 16.5v2.6l2.6-2.6"/>
+    <circle cx="12" cy="12" r="9.5" opacity=".9"/>
+    <line x1="5.2" y1="18.8" x2="18.8" y2="5.2"/>
+  </symbol>
+  <symbol id="i-expert" viewBox="0 0 24 24">
+    <circle cx="11.4" cy="7.6" r="3.4"/>
+    <path d="M4.6 20c0-4.1 3-6.8 6.8-6.8s6.8 2.7 6.8 6.8"/>
+  </symbol>
+
+  <!-- dashboard: store + order package -->
+  <symbol id="i-store" viewBox="0 0 24 24">
+    <path d="M4 9.5 5 4h14l1 5.5"/>
+    <path d="M3.5 9.5h17c0 1.9-1.4 3.2-3.2 3.2S14 11.4 14 9.5c0 1.9-1.4 3.2-3.2 3.2S7.6 11.4 7.6 9.5c0 1.9-1.4 3.2-3.2 3.2S1.5 11.4 3.5 9.5Z" opacity=".85"/>
+    <path d="M5 12.7V20h14v-7.3"/>
+    <path d="M10 20v-5h4v5"/>
+  </symbol>
+  <symbol id="i-box" viewBox="0 0 24 24">
+    <path d="M12 3.5 20 7.5v9L12 20.5 4 16.5v-9Z"/>
+    <path d="M4 7.5 12 11.5 20 7.5"/>
+    <path d="M12 11.5V20.5"/>
+  </symbol>
+
+  <!-- floating contact widget -->
+  <symbol id="i-phone" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+    <path d="M6.6 3.5c.6 0 1.1.4 1.3 1l1 2.6c.2.5 0 1.1-.4 1.4L7.3 9.9c1 2.3 2.9 4.2 5.2 5.2l1.4-1.2c.4-.3.9-.4 1.4-.2l2.6 1c.6.2 1 .7 1 1.3v2.2c0 .8-.7 1.5-1.5 1.4-6.6-.6-11.9-5.9-12.5-12.5-.1-.8.6-1.5 1.4-1.5h.7Z"/>
+  </symbol>
+  <symbol id="i-whatsapp" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 3.5a8.5 8.5 0 0 0-7.3 12.8L3.5 20.5l4.4-1.1A8.5 8.5 0 1 0 12 3.5Z"/>
+    <path d="M8.7 9.2c.2-.4.4-.5.6-.5h.4c.2 0 .3.1.4.3.1.3.5 1.2.5 1.3.1.1.1.2 0 .3-.1.2-.2.3-.3.4-.1.1-.2.2-.1.4.2.3.6.9 1.2 1.4.6.6 1.2.9 1.4 1 .2.1.3.1.4-.1.1-.1.3-.4.4-.5.1-.1.2-.2.4-.1.1.1 1.1.5 1.3.6.2.1.3.1.3.2 0 .1 0 .5-.2.8-.2.3-.9.6-1.3.6-.3 0-.7 0-2.1-.6-1.7-.7-2.9-2.4-3-2.6-.1-.1-.6-.8-.6-1.6 0-.7.4-1.1.5-1.2Z" fill="currentColor" stroke="none"/>
+  </symbol>
+</defs>
+</svg>
+
+<!-- ============================================================
+     NAV
+     ============================================================ -->
+<div class="nav-wrap">
+  <nav class="nav" id="nav">
+    <div class="nav-row">
+      <a class="nav-logo" href="#top" aria-label="حاسب">
+        <img src="./assets/logo.png" alt="شعار حاسب" />
+      </a>
+
+      <div class="nav-ticker" aria-hidden="true">
+        <div class="nav-ticker-track" id="tickerTrack">
+          <span class="nav-ticker-unit">
+            <span class="nav-ticker-item">🔥 لفترة محدودة 🔥 احصل على مستشار مالي متخصص لإدارة جميع الجوانب المالية والمحاسبية لمتجرك مقابل <span class="ticker-price-new">2,500 ريال</span> بدلاً من <span class="ticker-price-old">5,000 ريال</span>.</span>
+            <span class="nav-ticker-sep">•</span>
+          </span>
+          <span class="nav-ticker-unit" aria-hidden="true">
+            <span class="nav-ticker-item">🔥 لفترة محدودة 🔥 احصل على مستشار مالي متخصص لإدارة جميع الجوانب المالية والمحاسبية لمتجرك مقابل <span class="ticker-price-new">2,500 ريال</span> بدلاً من <span class="ticker-price-old">5,000 ريال</span>.</span>
+            <span class="nav-ticker-sep">•</span>
+          </span>
+          <span class="nav-ticker-unit" aria-hidden="true">
+            <span class="nav-ticker-item">🔥 لفترة محدودة 🔥 احصل على مستشار مالي متخصص لإدارة جميع الجوانب المالية والمحاسبية لمتجرك مقابل <span class="ticker-price-new">2,500 ريال</span> بدلاً من <span class="ticker-price-old">5,000 ريال</span>.</span>
+            <span class="nav-ticker-sep">•</span>
+          </span>
+          <span class="nav-ticker-unit" aria-hidden="true">
+            <span class="nav-ticker-item">🔥 لفترة محدودة 🔥 احصل على مستشار مالي متخصص لإدارة جميع الجوانب المالية والمحاسبية لمتجرك مقابل <span class="ticker-price-new">2,500 ريال</span> بدلاً من <span class="ticker-price-old">5,000 ريال</span>.</span>
+            <span class="nav-ticker-sep">•</span>
+          </span>
+        </div>
+      </div>
+
+      <a class="btn btn-primary" href="#" data-cta="whatsapp">
+        احجز استشارتك المجانية
+        <svg class="icon icon-sm" style="stroke:currentColor"><use href="#i-arrow"/></svg>
+      </a>
+    </div>
+  </nav>
+</div>
+
+<!-- ============================================================
+     SECTION 1 — HERO
+     ============================================================ -->
+<header class="hero" id="top">
+  <div class="container">
+    <div class="hero-card">
+      <div class="hero-glow"></div>
+      <div class="hero-glass-film"></div>
+      <div class="hero-grid"></div>
+      <div class="card-inner">
+    <div class="hero-layout">
+
+      <div data-reveal>
+        <span class="eyebrow"><span class="eyebrow-dot"></span>برنامج استعادة الأرباح للمتاجر الإلكترونية</span>
+
+        <h1 class="hero-title">
+          اكتشف أين <span class="accent">يُهدر ربح متجرك</span>...
+          قبل أن تتخذ قرارًا ماليًا جديدًا.
+        </h1>
+
+        <p class="hero-desc">
+          يعمل معك مستشار مالي متخصص في المتاجر الإلكترونية لتحليل أرقام متجرك، واكتشاف فرص زيادة الربحية، ومساعدتك على اتخاذ قرارات مالية مبنية على أرقام حقيقية.
+        </p>
+
+        <div class="hero-price">
+          <div class="hero-price-stack">
+            <span class="price-old">5,000 ريال</span>
+            <span class="price-new"><span class="num">2,500</span><span class="cur">ريال</span></span>
+          </div>
+          <div class="hero-offer-badge">
+            <span class="hero-offer-badge-main">وفر 50%</span>
+            <span class="hero-offer-badge-sub"><span class="pulse-dot"></span>لفترة محدودة</span>
+          </div>
+        </div>
+
+        <p class="hero-sub">
+          <svg class="icon icon-sm"><use href="#i-check"/></svg>
+          الاستشارة الأولى مجانية بالكامل.
+        </p>
+
+        <div class="hero-cta">
+          <a href="#" class="btn btn-primary btn-lg" data-cta="whatsapp">
+            احجز استشارتك المجانية
+            <svg class="icon" style="stroke:currentColor"><use href="#i-arrow"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual" data-reveal data-reveal-delay="2">
+        <div class="dash-card" id="dashCard">
+
+          <div class="dash-head">
+            <div class="dash-head-title"><svg class="icon icon-sm" style="color:var(--green-600)"><use href="#i-store"/></svg>لوحة أداء المتجر</div>
+            <div class="dash-live"><span class="pulse"></span>مباشر</div>
+          </div>
+
+          <div class="kpi-row">
+            <div class="kpi-tile">
+              <div class="label">المبيعات</div>
+              <div class="value" data-counter data-target="482" data-prefix="" data-suffix="K">0</div>
+              <div class="delta">▲ 12.4%</div>
+            </div>
+            <div class="kpi-tile">
+              <div class="label">الطلبات</div>
+              <div class="value" data-counter data-target="1240" data-suffix="">0</div>
+              <div class="delta">▲ 9.1%</div>
+            </div>
+            <div class="kpi-tile">
+              <div class="label">الأرباح</div>
+              <div class="value" data-counter data-target="96" data-suffix="K">0</div>
+              <div class="delta">▲ 18.4%</div>
+            </div>
+            <div class="kpi-tile">
+              <div class="kpi-ring"></div>
+              <div class="label">هامش الربح</div>
+              <div class="value" style="font-size:.9375rem">34%</div>
+            </div>
+          </div>
+
+          <div class="chart-panel">
+            <div class="chart-legend">
+              <span><i style="background:var(--green-600)"></i>الإيرادات</span>
+              <span><i style="background:var(--gray-300)"></i>المصاريف</span>
+            </div>
+            <svg viewBox="0 0 460 170" width="100%" height="140" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="revFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#07a647" stop-opacity=".28"/>
+                  <stop offset="100%" stop-color="#07a647" stop-opacity="0"/>
+                </linearGradient>
+              </defs>
+              <line x1="0" y1="24" x2="460" y2="24" stroke="rgba(6,133,58,.09)"/>
+              <line x1="0" y1="66" x2="460" y2="66" stroke="rgba(6,133,58,.09)"/>
+              <line x1="0" y1="108" x2="460" y2="108" stroke="rgba(6,133,58,.09)"/>
+              <line x1="0" y1="150" x2="460" y2="150" stroke="rgba(6,133,58,.09)"/>
+
+              <path d="M10,178 C80,175 120,172 160,170 C220,168 260,165 320,160 C370,158 400,155 450,150" fill="none" stroke="var(--gray-300)" stroke-width="2" stroke-dasharray="5 5" stroke-linecap="round"/>
+
+              <path d="M10,150 C60,142 80,128 120,132 C160,136 180,102 220,94 C260,86 280,60 320,64 C360,68 380,40 420,34 L450,25 L450,170 L10,170 Z" fill="url(#revFill)" stroke="none"/>
+              <path d="M10,150 C60,142 80,128 120,132 C160,136 180,102 220,94 C260,86 280,60 320,64 C360,68 380,40 420,34 L450,25" fill="none" stroke="#07a647" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+            <div class="months-row"><span>يناير</span><span>مارس</span><span>مايو</span><span>يوليو</span></div>
+          </div>
+
+          <div class="orders-panel">
+            <div class="orders-panel-head">
+              <span>آخر الطلبات</span>
+              <b>عرض الكل</b>
+            </div>
+            <div class="order-row">
+              <div class="order-icon"><svg class="icon icon-sm"><use href="#i-box"/></svg></div>
+              <div class="order-info">
+                <div class="order-title">طلب #1248 — عناية بالبشرة</div>
+                <div class="order-sub">منذ 12 دقيقة</div>
+              </div>
+              <div class="order-amount">349 ر.س</div>
+              <span class="status-pill done">مكتمل</span>
+            </div>
+            <div class="order-row">
+              <div class="order-icon"><svg class="icon icon-sm"><use href="#i-box"/></svg></div>
+              <div class="order-info">
+                <div class="order-title">طلب #1247 — إلكترونيات</div>
+                <div class="order-sub">منذ 40 دقيقة</div>
+              </div>
+              <div class="order-amount">1,120 ر.س</div>
+              <span class="status-pill done">مكتمل</span>
+            </div>
+            <div class="order-row">
+              <div class="order-icon"><svg class="icon icon-sm"><use href="#i-box"/></svg></div>
+              <div class="order-info">
+                <div class="order-title">طلب #1246 — أزياء</div>
+                <div class="order-sub">منذ ساعة</div>
+              </div>
+              <div class="order-amount">210 ر.س</div>
+              <span class="status-pill shipping">قيد الشحن</span>
+            </div>
+          </div>
+
+          <div class="floating-chip chip-1">
+            <svg width="46" height="24" viewBox="0 0 46 24"><polyline points="2,20 10,16 18,18 26,10 34,12 44,3" fill="none" stroke="#07a647" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <div><div class="chip-label">نمو الأرباح</div><div class="chip-value up">‎+18.4%</div></div>
+          </div>
+          <div class="floating-chip chip-2">
+            <div class="kpi-ring" style="margin:0;width:30px;height:30px;"></div>
+            <div><div class="chip-label">هامش الربح</div><div class="chip-value">34%</div></div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================
+     SECTION 2 — PAIN POINTS
+     ============================================================ -->
+<section class="pains" id="pains">
+  <div class="container">
+    <div class="floating-card light">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow"><span class="eyebrow-dot"></span>تحدٍ شائع بين أصحاب المتاجر</span>
+      <h2>هل تواجه واحدة من هذه التحديات؟</h2>
+      <p>إذا كانت إجابتك "نعم" على واحدة فقط من هذه النقاط... فغالبًا ستستفيد من <span class="pain-highlight">الاستشارة المجانية</span>.</p>
+    </div>
+
+    <div class="pain-grid">
+      <div class="pain-card" data-reveal>
+        <div class="icon-chip"><svg class="icon"><use href="#i-chart-down"/></svg></div>
+        <p>مبيعات متجرك مرتفعة لكن الأرباح أقل من المتوقع.</p>
+      </div>
+      <div class="pain-card" data-reveal data-reveal-delay="1">
+        <div class="icon-chip"><svg class="icon"><use href="#i-wallet-leak"/></svg></div>
+        <p>لا تعرف أين تذهب أرباح متجرك.</p>
+      </div>
+      <div class="pain-card" data-reveal data-reveal-delay="2">
+        <div class="icon-chip"><svg class="icon"><use href="#i-tag-q"/></svg></div>
+        <p>لا تعرف الربح الحقيقي لكل منتج.</p>
+      </div>
+      <div class="pain-card" data-reveal data-reveal-delay="1">
+        <div class="icon-chip"><svg class="icon"><use href="#i-mega-warn"/></svg></div>
+        <p>تشعر أن الإعلانات تستهلك جزءًا كبيرًا من الأرباح.</p>
+      </div>
+      <div class="pain-card" data-reveal data-reveal-delay="2">
+        <div class="icon-chip"><svg class="icon"><use href="#i-chart-warn"/></svg></div>
+        <p>لا تملك أرقامًا واضحة تساعدك على اتخاذ قرارات مالية صحيحة.</p>
+      </div>
+      <div class="pain-card" data-reveal data-reveal-delay="1">
+        <div class="icon-chip"><svg class="icon"><use href="#i-receipt-warn"/></svg></div>
+        <p>تفاجأ بقيمة الضريبة أو الزكاة عند موعد السداد.</p>
+      </div>
+    </div>
+
+    <div class="section-cta" data-reveal>
+      <a href="#" class="btn btn-primary btn-lg" data-cta="whatsapp">
+        احجز استشارتك المجانية
+        <svg class="icon" style="stroke:currentColor"><use href="#i-arrow"/></svg>
+      </a>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 3 — PROCESS
+     ============================================================ -->
+<section class="process" id="process">
+  <div class="container">
+    <div class="floating-card tint">
+    <div class="process-intro" data-reveal>
+      <span class="eyebrow"><span class="eyebrow-dot"></span>خطوات الاستشارة</span>
+      <h2>ماذا سيحدث خلال الاستشارة المجانية؟</h2>
+      <p class="lead">
+        <span class="muted">لن نقدم لك عرضًا مبيعاتيًا...</span>
+        <span class="strong">بل سيقوم مستشارك المالي بمراجعة وضع متجرك والإجابة عن أهم الأسئلة التي تؤثر على ربحيتك.</span>
+      </p>
+    </div>
+
+    <div class="process-track">
+      <div class="process-connectors" aria-hidden="true">
+        <span class="connector-seg"><span class="connector-fill"></span></span>
+        <span class="connector-seg"><span class="connector-fill"></span></span>
+        <span class="connector-seg"><span class="connector-fill"></span></span>
+        <span class="connector-seg"><span class="connector-fill"></span></span>
+      </div>
+      <div class="process-grid" id="processGrid">
+        <div class="process-step" data-reveal>
+          <span class="step-badge">01</span>
+          <div class="step-card">
+            <div class="step-icon"><svg class="icon"><use href="#i-search"/></svg></div>
+            <p>مراجعة الوضع المالي الحالي للمتجر.</p>
+          </div>
+        </div>
+        <div class="process-step" data-reveal data-reveal-delay="1">
+          <span class="step-badge">02</span>
+          <div class="step-card">
+            <div class="step-icon"><svg class="icon"><use href="#i-flag"/></svg></div>
+            <p>تحديد أبرز أسباب انخفاض الربحية.</p>
+          </div>
+        </div>
+        <div class="process-step" data-reveal data-reveal-delay="2">
+          <span class="step-badge">03</span>
+          <div class="step-card">
+            <div class="step-icon"><svg class="icon"><use href="#i-trend"/></svg></div>
+            <p>تحليل فرص زيادة الأرباح وتقليل الهدر.</p>
+          </div>
+        </div>
+        <div class="process-step" data-reveal data-reveal-delay="3">
+          <span class="step-badge">04</span>
+          <div class="step-card">
+            <div class="step-icon"><svg class="icon"><use href="#i-chat"/></svg></div>
+            <p>الإجابة عن جميع استفساراتك المالية.</p>
+          </div>
+        </div>
+        <div class="process-step" data-reveal data-reveal-delay="4">
+          <span class="step-badge">05</span>
+          <div class="step-card">
+            <div class="step-icon"><svg class="icon"><use href="#i-badge"/></svg></div>
+            <p>تحديد ما إذا كان برنامج استعادة الأرباح مناسبًا لمتجرك.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-cta" data-reveal>
+      <a href="#" class="btn btn-primary btn-lg" data-cta="whatsapp">
+        احجز استشارتك المجانية
+        <svg class="icon" style="stroke:currentColor"><use href="#i-arrow"/></svg>
+      </a>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 4 — WHY HASEB
+     ============================================================ -->
+<section class="why" id="why">
+  <div class="container">
+    <div class="floating-card light">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow"><span class="eyebrow-dot"></span>ما الذي يميزنا</span>
+      <h2>لماذا يختار أصحاب المتاجر حاسب؟</h2>
+    </div>
+
+    <p class="why-intro" data-reveal>
+      <span class="line-1">حاسب ليس برنامجًا محاسبيًا... وليس شركة تقدم استشارات مالية عامة.</span>
+      <span class="line-2">بل يعمل معك <span class="why-highlight">مستشار مالي</span> متخصص في المتاجر الإلكترونية، يتابع أرقام متجرك ويحولها إلى قرارات مالية تساعدك على زيادة الربحية.</span>
+    </p>
+
+    <div class="compare-grid">
+      <div class="compare-card negative" data-reveal>
+        <div class="compare-head">
+          <h3>❌ متجرك بدون حاسب</h3>
+          <p>تعتمد على أرقام غير مكتملة وقرارات غير مبنية على بيانات دقيقة.</p>
+        </div>
+        <div class="compare-divider"></div>
+        <div class="compare-rows">
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-wallet-leak"/></svg></div>
+            <p>لا تعرف أين تذهب أرباح متجرك.</p>
+          </div>
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-clock"/></svg></div>
+            <p>تسجيل العمليات المالية يتم بشكل غير منتظم أو متأخر.</p>
+          </div>
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-doc"/></svg></div>
+            <p>لا تملك تقارير مالية تساعدك على اتخاذ القرار.</p>
+          </div>
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-receipt-warn"/></svg></div>
+            <p>تفاجأ بمبالغ الضريبة أو الزكاة عند موعد السداد.</p>
+          </div>
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-mega-warn"/></svg></div>
+            <p>لا تعرف هل الإعلانات تحقق أرباحًا أم تستنزف ميزانيتك.</p>
+          </div>
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-percent"/></svg></div>
+            <p>صعوبة في متابعة العمولات ورسوم الشحن وبوابات الدفع.</p>
+          </div>
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-chart-down"/></svg></div>
+            <p>لا تستطيع معرفة أسباب انخفاض الأرباح رغم ارتفاع المبيعات.</p>
+          </div>
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-flow-q"/></svg></div>
+            <p>قراراتك المالية تعتمد على التوقعات أكثر من الأرقام.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="compare-card positive" data-reveal data-reveal-delay="1">
+        <div class="compare-head">
+          <h3>✅ متجرك مع حاسب</h3>
+          <p>يعمل معك مستشار مالي متخصص يتابع جميع الجوانب المالية لمتجرك ويحول الأرقام إلى قرارات عملية.</p>
+        </div>
+        <div class="compare-divider"></div>
+        <div class="compare-rows">
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-checklist"/></svg></div>
+            <p>متابعة جميع العمليات المالية بشكل منظم ودقيق.</p>
+          </div>
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-doc-check"/></svg></div>
+            <p>تقارير مالية واضحة تساعدك على اتخاذ قرارات صحيحة.</p>
+          </div>
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-receipt-check"/></svg></div>
+            <p>متابعة الضريبة والزكاة قبل موعد الاستحقاق.</p>
+          </div>
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-mega-check"/></svg></div>
+            <p>تحليل تكاليف الإعلانات وقياس العائد الحقيقي منها.</p>
+          </div>
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-percent"/></svg></div>
+            <p>متابعة العمولات ورسوم الشحن وبوابات الدفع.</p>
+          </div>
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-trend"/></svg></div>
+            <p>اكتشاف فرص زيادة الربحية وتقليل الهدر.</p>
+          </div>
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-badge"/></svg></div>
+            <p>توصيات مالية عملية مبنية على بيانات متجرك.</p>
+          </div>
+          <div class="compare-row">
+            <div class="compare-icon"><svg class="icon"><use href="#i-expert"/></svg></div>
+            <p>مستشار مالي متخصص في متاجر سلة وزد يتابع أرقام متجرك باستمرار.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-cta" data-reveal>
+      <a href="#" class="btn btn-primary btn-lg" data-cta="whatsapp">
+        احجز استشارتك المجانية
+        <svg class="icon" style="stroke:currentColor"><use href="#i-arrow"/></svg>
+      </a>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 5 — PARTNERS
+     ============================================================ -->
+<section class="partners" id="partners">
+  <div class="container">
+    <div class="floating-card tint">
+    <div class="section-head" data-reveal>
+      <h2>عملاؤنا</h2>
+      <p>نفخر بثقة المتاجر والعلامات التجارية التي اعتمدت على حاسب لإدارة الجوانب المالية لمتاجرها واتخاذ قرارات مالية أكثر ذكاءً.</p>
+    </div>
+
+    <!-- Auto-generated from /clients — do not hand-edit. Run `node build-clients.js`
+         after adding or removing logo files, and this block regenerates itself. -->
+    <!-- CLIENTS:START -->
+    <div class="logo-marquee" data-reveal>
+      <div class="logo-row" id="logoRowA">
+        <div class="logo-track" id="logoTrackA">
+          <div class="logo-set">
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/1626132081_alfahad.png" width="400" height="300" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">⌚ ساعات فاخرة</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/619802479_857537470617049_8156391552720329706_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">📚 كتب وروايات</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/685a27b7feef7321c9fe6c75b4b230aa.jpeg" width="1080" height="1080" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🥗 مواد غذائية</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/897d29b33e15338b2839280fad463b9a.png" width="368" height="438" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🎓 دورات تعليمية</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/channels4_profile.jpg" width="900" height="900" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🥤 مشروبات</span>
+            </div>
+          </div>
+          <div class="logo-set" aria-hidden="true">
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/1626132081_alfahad.png" width="400" height="300" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">⌚ ساعات فاخرة</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/619802479_857537470617049_8156391552720329706_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">📚 كتب وروايات</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/685a27b7feef7321c9fe6c75b4b230aa.jpeg" width="1080" height="1080" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🥗 مواد غذائية</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/897d29b33e15338b2839280fad463b9a.png" width="368" height="438" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🎓 دورات تعليمية</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/channels4_profile.jpg" width="900" height="900" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🥤 مشروبات</span>
+            </div>
+          </div>
+          <div class="logo-set" aria-hidden="true">
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/1626132081_alfahad.png" width="400" height="300" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">⌚ ساعات فاخرة</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/619802479_857537470617049_8156391552720329706_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">📚 كتب وروايات</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/685a27b7feef7321c9fe6c75b4b230aa.jpeg" width="1080" height="1080" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🥗 مواد غذائية</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/897d29b33e15338b2839280fad463b9a.png" width="368" height="438" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🎓 دورات تعليمية</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/channels4_profile.jpg" width="900" height="900" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🥤 مشروبات</span>
+            </div>
+          </div>
+          <div class="logo-set" aria-hidden="true">
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/1626132081_alfahad.png" width="400" height="300" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">⌚ ساعات فاخرة</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/619802479_857537470617049_8156391552720329706_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">📚 كتب وروايات</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/685a27b7feef7321c9fe6c75b4b230aa.jpeg" width="1080" height="1080" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🥗 مواد غذائية</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/897d29b33e15338b2839280fad463b9a.png" width="368" height="438" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🎓 دورات تعليمية</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/channels4_profile.jpg" width="900" height="900" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🥤 مشروبات</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="logo-row" id="logoRowB">
+        <div class="logo-track" id="logoTrackB">
+          <div class="logo-set">
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/581759442_122111506119035588_3983094537228221383_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">💰 منتجات رقمية ومالية</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/631068297_122096794419259995_4534826695669284242_n.jpg" width="938" height="938" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🌍 تعليم لغات</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/7777bb7e1cd7abb10a933013c934269f.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🍽️ مطعم</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/Artboard%201%20copy%203.png" width="1001" height="1001" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">💻 برمجيات وتطبيقات</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/Copy%20of%20logo%203.jpg" width="1000" height="1000" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">💼 خدمات استشارية</span>
+            </div>
+          </div>
+          <div class="logo-set" aria-hidden="true">
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/581759442_122111506119035588_3983094537228221383_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">💰 منتجات رقمية ومالية</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/631068297_122096794419259995_4534826695669284242_n.jpg" width="938" height="938" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🌍 تعليم لغات</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/7777bb7e1cd7abb10a933013c934269f.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🍽️ مطعم</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/Artboard%201%20copy%203.png" width="1001" height="1001" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">💻 برمجيات وتطبيقات</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/Copy%20of%20logo%203.jpg" width="1000" height="1000" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">💼 خدمات استشارية</span>
+            </div>
+          </div>
+          <div class="logo-set" aria-hidden="true">
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/581759442_122111506119035588_3983094537228221383_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">💰 منتجات رقمية ومالية</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/631068297_122096794419259995_4534826695669284242_n.jpg" width="938" height="938" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🌍 تعليم لغات</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/7777bb7e1cd7abb10a933013c934269f.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🍽️ مطعم</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/Artboard%201%20copy%203.png" width="1001" height="1001" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">💻 برمجيات وتطبيقات</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/Copy%20of%20logo%203.jpg" width="1000" height="1000" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">💼 خدمات استشارية</span>
+            </div>
+          </div>
+          <div class="logo-set" aria-hidden="true">
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/581759442_122111506119035588_3983094537228221383_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">💰 منتجات رقمية ومالية</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/631068297_122096794419259995_4534826695669284242_n.jpg" width="938" height="938" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🌍 تعليم لغات</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/7777bb7e1cd7abb10a933013c934269f.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">🍽️ مطعم</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/Artboard%201%20copy%203.png" width="1001" height="1001" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">💻 برمجيات وتطبيقات</span>
+            </div>
+            <div class="logo-card">
+              <span class="logo-img-wrap"><img src="./clients/Copy%20of%20logo%203.jpg" width="1000" height="1000" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-badge">💼 خدمات استشارية</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<!-- CLIENTS:END -->
+
+    <div class="section-cta" data-reveal>
+      <a href="#" class="btn btn-primary btn-lg" data-cta="whatsapp">
+        احجز استشارتك المجانية
+        <svg class="icon" style="stroke:currentColor"><use href="#i-arrow"/></svg>
+      </a>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SECTION 6 — FINAL CTA
+     ============================================================ -->
+<section class="final-cta" id="cta-final">
+  <div class="container">
+    <div class="floating-card dark" data-reveal>
+    <div class="final-glow"></div>
+    <div class="card-inner on-dark">
+      <span class="eyebrow"><span class="eyebrow-dot"></span>ابدأ اليوم</span>
+      <h2>جاهز تعرف الحقيقة عن أرباح متجرك؟</h2>
+      <p class="desc">
+        احجز استشارتك المجانية اليوم. وسيتواصل معك مستشار مالي متخصص في المتاجر الإلكترونية لمراجعة وضع متجرك وتحديد أفضل طريقة لمساعدتك.
+      </p>
+
+      <div class="final-price">
+        <span class="price-old">5,000 ريال</span>
+        <span class="price-new"><span class="num">2,500</span><span class="cur">ريال</span></span>
+        <span class="price-badge"><span class="pulse"></span>لفترة محدودة</span>
+      </div>
+
+      <div class="hero-cta">
+        <a href="#" class="btn btn-primary btn-lg" data-cta="whatsapp">
+          احجز استشارتك المجانية
+          <svg class="icon" style="stroke:currentColor"><use href="#i-arrow"/></svg>
+        </a>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="footer">
+  <div class="container">
+    <img src="./assets/logo.png" alt="شعار حاسب" />
+    <p class="tagline">الاستشارات والتطوير الإداري</p>
+    <p class="rights">© 2026 حاسب. جميع الحقوق محفوظة.</p>
+  </div>
+</footer>
+
+<!-- Floating contact widget — hrefs are populated from HASEB_CONTACT (see script) -->
+<div class="contact-widget-outer">
+  <div class="contact-widget">
+    <a class="contact-btn contact-call" href="#" data-cta="phone" aria-label="اتصل بنا">
+      <svg><use href="#i-phone"/></svg>
+      <span class="contact-tooltip">اتصل بنا</span>
+    </a>
+    <a class="contact-btn contact-whatsapp" href="#" data-cta="whatsapp" aria-label="راسلنا عبر واتساب">
+      <svg><use href="#i-whatsapp"/></svg>
+      <span class="contact-tooltip">راسلنا عبر واتساب</span>
+    </a>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Single source of truth for every contact destination on the page.
+     Every CTA button and the floating widget read from this object —
+     the phone/WhatsApp number and message live in exactly one place.
+     To change the number or message later, edit only this block. */
+  var HASEB_CONTACT = {
+    phoneNumber: '+966504493104',
+    phoneLink: 'tel:+966504493104',
+    whatsappNumber: '966504493104',
+    whatsappUrl: 'https://wa.me/966504493104?text=%D8%A7%D9%84%D8%B3%D9%84%D8%A7%D9%85%20%D8%B9%D9%84%D9%8A%D9%83%D9%85%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D9%81%D9%8A%20%D8%AD%D8%AC%D8%B2%20%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D8%B4%D8%A7%D8%B1%D8%A9%20%D8%A7%D9%84%D9%85%D8%AC%D8%A7%D9%86%D9%8A%D8%A9%20%D9%84%D9%85%D8%AA%D8%AC%D8%B1%D9%8A%20%D8%A7%D9%84%D8%A5%D9%84%D9%83%D8%AA%D8%B1%D9%88%D9%86%D9%8A%D8%8C%20%D9%88%D8%A3%D9%88%D8%AF%20%D9%85%D8%B9%D8%B1%D9%81%D8%A9%20%D9%83%D9%8A%D9%81%20%D9%8A%D9%85%D9%83%D9%86%20%D9%84%D9%81%D8%B1%D9%8A%D9%82%20%D8%AD%D8%A7%D8%B3%D8%A8%20%D9%85%D8%B3%D8%A7%D8%B9%D8%AF%D8%AA%D9%8A%20%D9%81%D9%8A%20%D8%AA%D8%AD%D8%B3%D9%8A%D9%86%20%D8%A7%D9%84%D8%AC%D9%88%D8%A7%D9%86%D8%A8%20%D8%A7%D9%84%D9%85%D8%A7%D9%84%D9%8A%D8%A9%20%D9%88%D8%A7%D9%84%D9%85%D8%AD%D8%A7%D8%B3%D8%A8%D9%8A%D8%A9%20%D9%84%D9%85%D8%AA%D8%AC%D8%B1%D9%8A.'
+  };
+  document.querySelectorAll('[data-cta="whatsapp"]').forEach(function(el){
+    el.setAttribute('href', HASEB_CONTACT.whatsappUrl);
+    el.setAttribute('target', '_blank');
+    el.setAttribute('rel', 'noopener');
+  });
+  document.querySelectorAll('[data-cta="phone"]').forEach(function(el){
+    el.setAttribute('href', HASEB_CONTACT.phoneLink);
+  });
+
+  /* Nav scroll state */
+  var nav = document.getElementById('nav');
+  function onScroll(){
+    if(window.scrollY > 12){ nav.classList.add('scrolled'); }
+    else{ nav.classList.remove('scrolled'); }
+  }
+  document.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  /* Announcement ticker: pure CSS marquee (see .nav-ticker-track), no
+     JS involved — nothing to set up here. */
+
+  /* Reveal on scroll */
+  if('IntersectionObserver' in window && !reduced){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:.15, rootMargin:'0px 0px -60px 0px'});
+    document.querySelectorAll('[data-reveal]').forEach(function(el){ io.observe(el); });
+  } else {
+    document.querySelectorAll('[data-reveal]').forEach(function(el){ el.classList.add('in-view'); });
+  }
+
+  /* KPI counters */
+  function animateCounter(el){
+    var target = parseFloat(el.getAttribute('data-target'));
+    var suffix = el.getAttribute('data-suffix') || '';
+    var fmt = function(n){ return suffix ? n : n.toLocaleString('en-US'); };
+    if(reduced){ el.textContent = fmt(target) + suffix; return; }
+    var start = null, duration = 1300;
+    function step(ts){
+      if(!start) start = ts;
+      var p = Math.min((ts - start) / duration, 1);
+      var eased = 1 - Math.pow(1 - p, 3);
+      var val = Math.round(target * eased);
+      el.textContent = fmt(val) + suffix;
+      if(p < 1){ requestAnimationFrame(step); }
+    }
+    requestAnimationFrame(step);
+  }
+  if('IntersectionObserver' in window){
+    var counterIO = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          animateCounter(entry.target);
+          counterIO.unobserve(entry.target);
+        }
+      });
+    }, {threshold:.6});
+    document.querySelectorAll('[data-counter]').forEach(function(el){ counterIO.observe(el); });
+  }
+
+  /* Subtle 3D tilt on hero dashboard card (desktop pointer only) */
+  var card = document.getElementById('dashCard');
+  if(card && window.matchMedia('(min-width: 1050px) and (hover: hover)').matches && !reduced){
+    var visual = card.parentElement;
+    visual.addEventListener('mousemove', function(e){
+      var r = visual.getBoundingClientRect();
+      var x = (e.clientX - r.left) / r.width - .5;
+      var y = (e.clientY - r.top) / r.height - .5;
+      card.style.transform = 'rotateY(' + (-8 - x*10) + 'deg) rotateX(' + (4 - y*10) + 'deg)';
+    });
+    visual.addEventListener('mouseleave', function(){
+      card.style.transform = 'rotateY(-8deg) rotateX(4deg)';
+    });
+  }
+
+  /* Consultation steps — interactive journey.
+     Every card is green (trusted/default) at rest. Desktop: hovering a
+     step makes it the "active" gold-highlighted step, resets when the
+     pointer leaves the grid. Mobile/touch: tapping a step selects it
+     as "active" and it stays highlighted until another step is tapped
+     (no hover to reset from). Either way, earlier steps get "is-passed"
+     purely to fill the connector leading up to the active one. */
+  var processTrack = document.querySelector('.process-track');
+  var processGrid = document.getElementById('processGrid');
+  if(processTrack && processGrid){
+    var stepEls = Array.prototype.slice.call(processGrid.querySelectorAll('.process-step'));
+    var segEls = Array.prototype.slice.call(processTrack.querySelectorAll('.connector-seg'));
+    function setStepState(activeIndex){
+      stepEls.forEach(function(el, i){
+        el.classList.toggle('is-active', i === activeIndex);
+        el.classList.toggle('is-passed', activeIndex > -1 && i < activeIndex);
+      });
+      segEls.forEach(function(seg, i){
+        seg.classList.toggle('is-filled', activeIndex > -1 && i < activeIndex);
+      });
+    }
+    if(window.matchMedia('(hover: hover) and (pointer: fine)').matches){
+      stepEls.forEach(function(el, i){
+        el.addEventListener('mouseenter', function(){ setStepState(i); });
+      });
+      processGrid.addEventListener('mouseleave', function(){ setStepState(-1); });
+    } else {
+      stepEls.forEach(function(el, i){
+        el.addEventListener('click', function(){ setStepState(i); });
+      });
+    }
+  }
+
+  /* Client logo cloud: pure CSS marquee (see .logo-track / #logoTrackB /
+     .logo-row:hover), no JS involved — nothing to set up here. */
+})();
+</script>
+
+</body>
+</html>
