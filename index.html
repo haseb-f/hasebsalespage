@@ -210,20 +210,33 @@
   .nav-ticker-unit{display:flex;align-items:center;gap:0;flex-shrink:0;}
   .nav-ticker-item{font-size:1.0625rem;font-weight:700;color:var(--green-800);white-space:nowrap;padding-inline:14px;letter-spacing:.005em;}
   .nav-ticker-sep{color:var(--green-400);font-size:.6875rem;flex-shrink:0;}
-  .ticker-price-new{color:#f4c542;font-weight:800;text-shadow:0 1px 1px rgba(10,15,13,.18);}
+  .ticker-price-new{font-size:1.12em;color:#f4c542;font-weight:800;text-shadow:0 1px 1px rgba(10,15,13,.18);}
   .ticker-price-old{
-    color:inherit;font-weight:700;
+    color:var(--gray-500);font-weight:700;
     text-decoration-line:line-through;text-decoration-color:#dc2626;
     text-decoration-thickness:1.5px;text-decoration-skip-ink:none;
   }
   @keyframes ticker-scroll{from{transform:translateX(0);}to{transform:translateX(25%);}}
   @media(prefers-reduced-motion:reduce){.nav-ticker-track{animation:none;}}
 
-  @media(max-width:760px){.nav-ticker{display:none;}}
+  /* mobile: the ticker used to be display:none below 760px, which hid the
+     promo message entirely. Instead we now shrink the logo and CTA (the
+     two fixed-width neighbors) so the flexible ticker in between keeps a
+     real, always-visible column to scroll in — same seamless-loop track,
+     just narrower. */
+  @media(max-width:760px){
+    .nav-row{gap:10px;padding:9px 10px 9px 18px;}
+    .nav-logo img{height:32px;}
+    .nav-ticker-item{font-size:.8125rem;padding-inline:11px;}
+    .nav-ticker-sep{font-size:.625rem;}
+    .nav .btn-primary{padding:10px 16px;font-size:.8125rem;gap:6px;}
+  }
   @media(max-width:480px){
-    .nav-row{padding:10px 16px;gap:12px;}
-    .nav-logo img{height:38px;}
-    .nav .btn-primary{padding:12px 16px;font-size:.8125rem;}
+    .nav-row{padding:8px 8px 8px 14px;gap:6px;}
+    .nav-logo img{height:26px;}
+    .nav-ticker-item{font-size:.75rem;padding-inline:9px;}
+    .nav .btn-primary{padding:9px 12px;font-size:.6875rem;gap:0;}
+    .nav .btn-primary .icon-sm{display:none;}
   }
 
   /* ============================================================
@@ -354,11 +367,21 @@
   }
 
   .price-badge{
-    display:inline-flex;align-items:center;gap:7px;
+    display:inline-flex;flex-direction:column;align-items:center;gap:6px;
     background:rgba(9,201,87,.12);border:1px solid rgba(9,201,87,.3);
-    color:var(--green-300);font-size:.8125rem;font-weight:600;
-    padding:6px 14px;border-radius:var(--radius-full);
+    color:var(--green-300);font-weight:600;
+    padding:12px 22px;border-radius:var(--radius-full);
     margin-inline-start:2px;
+    box-shadow:0 14px 34px -10px rgba(9,201,87,.4), inset 0 1px 0 rgba(255,255,255,.06);
+  }
+  .price-badge-line1{display:inline-flex;align-items:center;gap:7px;font-size:.8125rem;white-space:nowrap;}
+  .price-badge-line2{display:inline-flex;align-items:baseline;gap:5px;font-size:.9375rem;color:var(--gray-300,#c7cdc9);white-space:nowrap;}
+  .price-badge-num{font-size:1.375rem;font-weight:800;color:#f4c542;text-shadow:0 1px 1px rgba(4,20,10,.35);}
+  .price-badge-cur{color:#f4c542;font-weight:700;}
+  .price-badge-old{
+    color:var(--gray-400);font-weight:600;
+    text-decoration-line:line-through;text-decoration-color:#dc2626;
+    text-decoration-thickness:1.5px;text-decoration-skip-ink:none;
   }
   .price-badge .pulse{width:7px;height:7px;border-radius:50%;background:var(--green-400);position:relative;flex-shrink:0;}
   .price-badge .pulse::after{
@@ -366,6 +389,10 @@
     animation:pulse-ring 1.8s var(--ease) infinite;
   }
   @keyframes pulse-ring{0%{transform:scale(.6);opacity:1;}100%{transform:scale(2.2);opacity:0;}}
+  @media(max-width:480px){
+    .price-badge{padding:10px 18px;}
+    .price-badge-num{font-size:1.1875rem;}
+  }
 
   .hero-sub{margin-top:16px;display:flex;align-items:center;gap:8px;color:var(--gray-700);font-size:.9375rem;font-weight:500;}
   .hero-sub .icon{color:var(--green-600);flex-shrink:0;}
@@ -838,7 +865,7 @@
   .final-cta .desc{
     max-width:52ch;margin:22px auto 0;color:#b9c2bd;font-size:1.0625rem;line-height:1.9;
   }
-  .final-price{margin:38px auto 0;display:inline-flex;align-items:flex-end;gap:14px;flex-wrap:wrap;justify-content:center;}
+  .final-price{margin:38px auto 0;display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:center;}
   .final-cta .hero-cta{justify-content:center;margin-top:38px;}
 
   /* ============================================================
@@ -1741,9 +1768,15 @@
       </p>
 
       <div class="final-price">
-        <span class="price-old">5,000 ريال</span>
-        <span class="price-new"><span class="num">2,500</span><span class="cur">ريال</span></span>
-        <span class="price-badge"><span class="pulse"></span>لفترة محدودة</span>
+        <span class="price-badge">
+          <span class="price-badge-line1"><span class="pulse"></span>هذا العرض متاح لفترة محدودة</span>
+          <span class="price-badge-line2">
+            <span class="price-badge-num">2,500</span>
+            <span class="price-badge-cur">ريال</span>
+            <span>بدلاً من</span>
+            <span class="price-badge-old">5,000 ريال</span>
+          </span>
+        </span>
       </div>
 
       <div class="hero-cta">
