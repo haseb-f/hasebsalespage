@@ -1,6 +1,50 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.start'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-KTHZSFNL');</script>
+<!-- End Google Tag Manager -->
+
+<!-- ============================================================
+     HASEB DATALAYER UTILITY
+     Reusable event-push API used across the page. GTM tags for
+     GA4 / Meta Pixel / TikTok Pixel are configured inside the GTM
+     container to fire on these custom dataLayer events — see
+     GTM-SETUP.md for the exact trigger/tag/variable names to create.
+     ============================================================ -->
+<script>
+window.dataLayer = window.dataLayer || [];
+window.HasebDL = (function () {
+  function push(event, params) {
+    var payload = Object.assign({ event: event }, params || {});
+    window.dataLayer.push(payload);
+    return payload;
+  }
+  return {
+    push: push,
+    pageView: function (p) { return push('page_view', p); },
+    buttonClick: function (p) { return push('button_click', p); },
+    whatsappClick: function (p) { return push('whatsapp_click', p); },
+    phoneClick: function (p) { return push('phone_click', p); },
+    emailClick: function (p) { return push('email_click', p); },
+    formSubmit: function (p) { return push('form_submit', p); },
+    leadGenerated: function (p) { return push('lead_generated', p); },
+    download: function (p) { return push('download', p); },
+    scrollDepth: function (p) { return push('scroll_depth', p); },
+    timeOnPage: function (p) { return push('time_on_page', p); }
+  };
+})();
+window.HasebDL.pageView({
+  page_location: window.location.href,
+  page_path: window.location.pathname,
+  page_title: document.title
+});
+</script>
+
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>حاسب | برنامج استعادة الأرباح للمتاجر الإلكترونية</title>
@@ -941,6 +985,10 @@
 </style>
 </head>
 <body>
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KTHZSFNL"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
 
 <!-- ============================================================
      SVG ICON SPRITE
@@ -1838,6 +1886,104 @@
   document.querySelectorAll('[data-cta="phone"]').forEach(function(el){
     el.setAttribute('href', HASEB_CONTACT.phoneLink);
   });
+
+  /* ============================================================
+     CLICK TRACKING — single delegated listener covers every CTA
+     (WhatsApp, phone, and any future mailto:/download link) so
+     there is exactly one place wiring clicks to the dataLayer,
+     no matter how many buttons point at the same destination.
+     ============================================================ */
+  function ctaLabel(el){
+    return (el.getAttribute('aria-label') || el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 80);
+  }
+  function ctaLocation(el){
+    if(el.closest('.contact-widget-outer')) return 'floating_widget';
+    var scope = el.closest('section[id], header[id], footer, nav[id]');
+    if(!scope) return 'unknown';
+    return scope.id || scope.tagName.toLowerCase();
+  }
+  document.addEventListener('click', function(e){
+    var el = e.target.closest('a, button');
+    if(!el || !window.HasebDL) return;
+
+    var ctaType = el.getAttribute('data-cta');
+    var label = ctaLabel(el);
+    var location = ctaLocation(el);
+
+    if(ctaType === 'whatsapp'){
+      window.HasebDL.buttonClick({ button_type: 'whatsapp', cta_label: label, cta_location: location });
+      window.HasebDL.whatsappClick({ cta_label: label, cta_location: location });
+      /* This page has no on-site consultation form — a WhatsApp click IS
+         the lead conversion moment, so it also fires lead_generated for
+         GA4 / Meta (Lead + CompleteRegistration) / TikTok (SubmitForm +
+         CompleteRegistration), per the GTM-SETUP.md trigger mapping. */
+      window.HasebDL.leadGenerated({ lead_method: 'whatsapp', cta_label: label, cta_location: location });
+      return;
+    }
+    if(ctaType === 'phone'){
+      window.HasebDL.buttonClick({ button_type: 'phone', cta_label: label, cta_location: location });
+      window.HasebDL.phoneClick({ cta_label: label, cta_location: location });
+      return;
+    }
+    var href = el.getAttribute('href') || '';
+    if(href.indexOf('mailto:') === 0){
+      window.HasebDL.buttonClick({ button_type: 'email', cta_label: label, cta_location: location });
+      window.HasebDL.emailClick({ cta_label: label, cta_location: location, email: href.replace('mailto:', '') });
+      return;
+    }
+    if(el.hasAttribute('download') || /\.(pdf|zip|docx?|xlsx?|pptx?)$/i.test(href)){
+      window.HasebDL.buttonClick({ button_type: 'download', cta_label: label, cta_location: location });
+      window.HasebDL.download({ cta_label: label, cta_location: location, file_url: el.href, file_name: href.split('/').pop() });
+      return;
+    }
+    if(el.classList.contains('btn')){
+      window.HasebDL.buttonClick({ button_type: 'generic', cta_label: label, cta_location: location });
+    }
+  }, false);
+
+  /* ============================================================
+     SCROLL DEPTH — fires once per threshold (25/50/75/100%)
+     ============================================================ */
+  (function(){
+    if(!window.HasebDL) return;
+    var thresholds = [25, 50, 75, 100];
+    var fired = {};
+    var ticking = false;
+    function checkScroll(){
+      var doc = document.documentElement;
+      var scrollable = doc.scrollHeight - doc.clientHeight;
+      if(scrollable <= 0) return;
+      var pct = Math.min(100, Math.round((window.scrollY / scrollable) * 100));
+      thresholds.forEach(function(t){
+        if(pct >= t && !fired[t]){
+          fired[t] = true;
+          window.HasebDL.scrollDepth({ percent: t });
+        }
+      });
+    }
+    window.addEventListener('scroll', function(){
+      if(!ticking){
+        ticking = true;
+        window.requestAnimationFrame(function(){ checkScroll(); ticking = false; });
+      }
+    }, { passive: true });
+    checkScroll();
+  })();
+
+  /* ============================================================
+     TIME ON PAGE — fires once per engaged-time mark, skipped if
+     the tab is backgrounded when the mark is hit
+     ============================================================ */
+  (function(){
+    if(!window.HasebDL) return;
+    [15, 30, 60, 120, 300].forEach(function(sec){
+      setTimeout(function(){
+        if(document.visibilityState === 'visible'){
+          window.HasebDL.timeOnPage({ seconds: sec });
+        }
+      }, sec * 1000);
+    });
+  })();
 
   /* Nav scroll state */
   var nav = document.getElementById('nav');
