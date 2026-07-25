@@ -10,6 +10,29 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 
 <!-- ============================================================
+     GA4 DIRECT BOOTSTRAP (bypasses GTM's built-in Google tag)
+     GTM's own "Google tag" config tag (tied to this same
+     G-DCP0ZNJH7F ID, firing on Initialization) reliably registers
+     itself but never actually sends the config/page_view hit —
+     confirmed via live testing (zero g/collect requests across
+     repeated loads, verified with the Performance Resource Timing
+     API, while calling gtag('config', ...) directly always
+     succeeds). This is the standard Google-provided gtag.js snippet,
+     loaded independently so the initial GA4 hit fires reliably
+     regardless of that GTM-internal fault. All other GA4 event tags
+     (whatsapp_click, lead_generated, etc.) stay configured in GTM
+     as-is. If GTM's own Google tag is later fixed or removed, this
+     block should be reviewed to avoid a duplicate page_view.
+     ============================================================ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-DCP0ZNJH7F"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){window.dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-DCP0ZNJH7F');
+</script>
+
+<!-- ============================================================
      HASEB DATALAYER UTILITY
      Reusable event-push API used across the page. GTM tags for
      GA4 / Meta Pixel / TikTok Pixel are configured inside the GTM
