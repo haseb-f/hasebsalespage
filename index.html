@@ -88,10 +88,25 @@ function haseb_loadTrackers(){
   gtag('config', 'G-DCP0ZNJH7F');
 }
 
-if('requestIdleCallback' in window){
-  requestIdleCallback(haseb_loadTrackers, {timeout: 2000});
+/* Schedule the idle callback only after the window "load" event, not
+   immediately at parse time. Scheduling it immediately meant the browser
+   could consider the main thread "idle" (and run ~600KB of tracking JS)
+   right after the very first layout pass — squarely inside the LCP
+   window — which measurably delayed the hero's actual paint despite the
+   DOM/CSS being ready. Waiting for "load" first lets the initial render
+   finish undisturbed; the interaction listeners below still let an
+   engaged visitor trigger tracking sooner than that. */
+function haseb_scheduleTrackers(){
+  if('requestIdleCallback' in window){
+    requestIdleCallback(haseb_loadTrackers, {timeout: 2000});
+  } else {
+    setTimeout(haseb_loadTrackers, 1500);
+  }
+}
+if(document.readyState === 'complete'){
+  haseb_scheduleTrackers();
 } else {
-  setTimeout(haseb_loadTrackers, 1500);
+  window.addEventListener('load', haseb_scheduleTrackers);
 }
 ['pointerdown','touchstart','keydown','scroll'].forEach(function(evt){
   window.addEventListener(evt, haseb_loadTrackers, {once:true, passive:true});
