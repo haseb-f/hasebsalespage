@@ -7,11 +7,19 @@
 <meta name="description" content="اكتشف أين يُهدر ربح متجرك قبل أن تتخذ قرارًا ماليًا جديدًا. استشارة مالية مجانية مع مستشار متخصص في متاجر سلة وزد." />
 <link rel="icon" href="./assets/logo.png" type="image/png" />
 
-<!-- Preload only the one font FILE the LCP element (hero H1, font-weight:700)
-     actually needs at first paint. The other 3 weights still load via the
-     normal @font-face swap path below — no preload needed, they're not on
-     the critical path. -->
+<!-- All 4 weights are preloaded: the redesigned Hero (2026-07) now uses
+     every weight above the fold (400 in .hero-cta-note, 500 in .hero-lead,
+     600 in .curiosity-card/.hero-trust, 700 in the headline/alert/button),
+     not just Bold. Lighthouse's layout-shift audit showed the 3
+     non-preloaded weights each triggering a "Web font loaded" reflow on
+     the new hero-curiosity block once they arrived late — preloading all
+     4 (same 4 files already being fetched via @font-face either way, just
+     reprioritized) removes that swap-driven CLS instead of adding any new
+     font asset. -->
 <link rel="preload" as="font" type="font/woff2" href="./fonts/Expo_Arabic_Bold-gMswv_yR.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="./fonts/Expo_Arabic_Semibold-DjD7hrvy.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="./fonts/Expo_Arabic_Medium-B7WliHSW.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="./fonts/Expo_Arabic_Light-Cmk8w8K1.woff2" crossorigin>
 
 <!-- ============================================================
      TRACKING — dataLayer + HasebDL are created synchronously right
