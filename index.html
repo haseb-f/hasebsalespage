@@ -395,6 +395,23 @@ if(document.readyState === 'complete'){
   .hero-layout{display:grid;grid-template-columns:1fr;gap:64px;align-items:center;}
   @media(min-width:1050px){.hero-layout{grid-template-columns:1.02fr .98fr;gap:40px;}}
 
+  /* top-of-hero alert pill — reuses the existing warn-* tokens already
+     defined for pain-point iconography, just applied to a badge for the
+     first time, so it stays visually on-brand rather than introducing a
+     new red. */
+  .hero-alert{
+    display:inline-flex;align-items:center;gap:7px;
+    font-size:.8125rem;font-weight:700;letter-spacing:.01em;
+    color:var(--warn-600);
+    background:var(--warn-50);
+    border:1px solid var(--warn-100);
+    padding:7px 16px;
+    border-radius:var(--radius-full);
+  }
+  .hero-alert-emoji{display:inline-block;animation:hero-alert-pulse 1.8s ease-in-out infinite;transform-origin:center;}
+  @keyframes hero-alert-pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.25);opacity:.65;}}
+  @media(prefers-reduced-motion:reduce){.hero-alert-emoji{animation:none;}}
+
   .hero-title{
     font-size:clamp(2.05rem,1.5rem + 2.6vw,3.4rem);
     line-height:1.32;
@@ -405,72 +422,36 @@ if(document.readyState === 'complete'){
     background:linear-gradient(90deg,var(--green-600),var(--green-900));
     -webkit-background-clip:text;background-clip:text;color:transparent;
   }
-  .hero-desc{
+  .hero-title .accent-red{color:var(--warn-600);}
+  /* the curiosity headline stacks short punchy lines instead of wrapping
+     prose, so it reads best with a tighter line-height than the default */
+  .hero-title-curiosity{line-height:1.16;}
+
+  .hero-lead{
     margin-top:22px;font-size:clamp(1rem,.95rem + .3vw,1.1875rem);
-    color:var(--gray-700); line-height:1.9; max-width:52ch;
+    color:var(--gray-700); line-height:1.7; max-width:52ch;
+    font-weight:500;
   }
+  .hero-lead-muted{color:var(--gray-400);}
+  .hero-lead-accent{color:var(--green-600);font-weight:700;}
 
-  /* pricing is one premium component: price-stack + badge side by side */
-  .hero-price{
-    position:relative;
-    margin-top:40px;
-    display:flex;
-    align-items:center;
-    gap:24px;
-    animation:price-fade-in .9s var(--ease) .2s both;
+  /* three curiosity cards — self-playing CSS fade (same technique the
+     old .hero-price used: opacity+transform keyframe with "both" fill
+     mode, so each card already occupies its final layout box before the
+     animation starts — zero CLS, no JS, no IntersectionObserver). */
+  .hero-curiosity{margin-top:26px;display:flex;flex-direction:column;gap:10px;max-width:52ch;}
+  .curiosity-card{
+    display:flex;align-items:center;gap:10px;
+    padding:14px 18px;border-radius:var(--radius-lg);
+    background:var(--gray-50);border:1px solid var(--border-light);
+    font-size:.9375rem;font-weight:600;color:var(--gray-800);
+    opacity:0;animation:curiosity-fade-in .7s var(--ease) both;
   }
-  @keyframes price-fade-in{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
-  @media(prefers-reduced-motion:reduce){.hero-price{animation:none;}}
-
-  .hero-price-stack{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:10px;}
-  .hero-price-stack::before{
-    content:'';position:absolute;inset:-24px -28px;
-    background:radial-gradient(ellipse 65% 65% at 32% 45%, rgba(9,201,87,.22), transparent 72%);
-    filter:blur(6px);z-index:-1;pointer-events:none;
-  }
-
-  /* old price — hero-scoped: bigger, higher-contrast, unmistakable red strike */
-  .hero-price .price-old{
-    position:relative;display:inline-block;
-    font-size:1.75rem;font-weight:700;
-    color:var(--gray-600);text-decoration:none;
-  }
-  .hero-price .price-old::after{
-    content:'';position:absolute;left:-7%;right:-7%;top:52%;height:4px;
-    background:linear-gradient(90deg, rgba(220,38,38,0), #dc2626 10%, #ef4444 50%, #dc2626 90%, rgba(220,38,38,0));
-    transform:translateY(-50%) rotate(-8deg);
-    border-radius:4px;
-    box-shadow:0 0 12px rgba(220,38,38,.55);
-  }
-
-  .hero-price .price-new .num{
-    font-size:clamp(2.75rem,2.1rem + 2vw,3.9rem);
-    color:var(--green-600);
-    filter:drop-shadow(0 0 30px rgba(9,201,87,.4));
-  }
-  .hero-price .price-new .cur{color:var(--green-700);}
-
-  /* premium offer badge — now lives inside the pricing component itself,
-     to the left of the price stack, vertically centered with it. */
-  .hero-offer-badge{
-    position:relative;flex-shrink:0;z-index:2;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    padding:12px 20px;border-radius:16px;
-    background:linear-gradient(135deg,var(--green-500),var(--green-800));
-    border:2px solid rgba(255,255,255,.85);
-    box-shadow:0 16px 34px -8px rgba(6,85,45,.45), inset 0 0 0 1px rgba(255,214,102,.2), 0 0 26px rgba(255,214,102,.22);
-    transform:rotate(-4deg);
-    animation:badge-float 4.5s ease-in-out infinite;
-  }
-  .hero-offer-badge-main{font-size:1.125rem;font-weight:700;color:#ffdd7a;text-shadow:0 1px 2px rgba(4,20,10,.4), 0 0 18px rgba(255,214,102,.6);white-space:nowrap;}
-  .hero-offer-badge-sub{display:flex;align-items:center;gap:5px;margin-top:3px;font-size:.6875rem;font-weight:600;color:#ffffff;white-space:nowrap;}
-  .hero-offer-badge-sub .pulse-dot{width:5px;height:5px;border-radius:50%;background:#ffd666;box-shadow:0 0 6px #ffd666;flex-shrink:0;}
-  @keyframes badge-float{0%,100%{transform:rotate(-4deg) translateY(0);}50%{transform:rotate(-2deg) translateY(-6px);}}
-  @media(prefers-reduced-motion:reduce){.hero-offer-badge{animation:none;}}
-  @media(max-width:480px){
-    .hero-price{flex-direction:column;align-items:flex-start;gap:16px;}
-    .hero-offer-badge{order:-1;padding:10px 18px;}
-  }
+  .curiosity-card:nth-child(1){animation-delay:.15s;}
+  .curiosity-card:nth-child(2){animation-delay:.3s;}
+  .curiosity-card:nth-child(3){animation-delay:.45s;}
+  @keyframes curiosity-fade-in{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);}}
+  @media(prefers-reduced-motion:reduce){.curiosity-card{animation:none;opacity:1;}}
 
   .price-badge{
     display:inline-flex;flex-direction:column;align-items:center;gap:6px;
@@ -500,11 +481,10 @@ if(document.readyState === 'complete'){
     .price-badge-num{font-size:1.1875rem;}
   }
 
-  .hero-sub{margin-top:16px;display:flex;align-items:center;gap:8px;color:var(--gray-700);font-size:.9375rem;font-weight:500;}
-  .hero-sub .icon{color:var(--green-600);flex-shrink:0;}
-
   .hero-cta{margin-top:34px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;}
-  .hero-cta-note{font-size:.8125rem;color:#7d8a83;}
+  .hero-cta-note{margin-top:14px;font-size:.8125rem;color:#7d8a83;}
+
+  .hero-trust{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px 20px;font-size:.8125rem;font-weight:600;color:var(--gray-600);}
 
   /* premium shine sweep — hero's CTA and the repeated section CTAs
      share this exact treatment; nav/final-cta buttons are unaffected */
@@ -1256,7 +1236,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
 
       <a class="btn btn-primary" href="#" data-cta="whatsapp">
-        احجز استشارتك المجانية
+        افحص متجرك
         <svg class="icon icon-sm" style="stroke:currentColor"><use href="#i-arrow"/></svg>
       </a>
     </div>
@@ -1279,40 +1259,46 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
            fade-in used everywhere else on the page: it must paint on
            first render (it's the LCP element), not wait for the
            bottom-of-page IntersectionObserver script that only runs
-           after the entire rest of the document has been parsed. -->
+           after the entire rest of the document has been parsed. The
+           curiosity-card stagger below is a separate, self-playing CSS
+           keyframe (same pattern as .hero-price used before) — not the
+           scroll-triggered [data-reveal] system — so it never delays
+           first paint either. -->
       <div>
-        <span class="eyebrow"><span class="eyebrow-dot"></span>برنامج استعادة الأرباح للمتاجر الإلكترونية</span>
+        <span class="hero-alert"><span class="hero-alert-emoji">🔴</span>تنبيه لأصحاب المتاجر الإلكترونية</span>
 
-        <h1 class="hero-title">
-          اكتشف أين <span class="accent">يُهدر ربح متجرك</span>...
-          قبل أن تتخذ قرارًا ماليًا جديدًا.
+        <h1 class="hero-title hero-title-curiosity">
+          قد يكون<br>
+          <span class="accent">متجرك</span><br>
+          يبيع أكثر من أي وقت...<br>
+          لكن<br>
+          <span class="accent-red">أرباحك</span><br>
+          <span class="accent-red">أقل</span> من أي وقت.
         </h1>
 
-        <p class="hero-desc">
-          يعمل معك مستشار مالي متخصص في المتاجر الإلكترونية لتحليل أرقام متجرك، واكتشاف فرص زيادة الربحية، ومساعدتك على اتخاذ قرارات مالية مبنية على أرقام حقيقية.
+        <p class="hero-lead">
+          السبب غالبًا ليس <span class="hero-lead-muted">التسويق</span>...<br>
+          بل <span class="hero-lead-accent">أرقام</span> داخل متجرك لا يراها أحد.
         </p>
 
-        <div class="hero-price">
-          <div class="hero-price-stack">
-            <span class="price-old">5,000 ريال</span>
-            <span class="price-new"><span class="num">2,500</span><span class="cur">ريال</span></span>
-          </div>
-          <div class="hero-offer-badge">
-            <span class="hero-offer-badge-main">وفر 50%</span>
-            <span class="hero-offer-badge-sub"><span class="pulse-dot"></span>لفترة محدودة</span>
-          </div>
+        <div class="hero-curiosity">
+          <div class="curiosity-card">📉 هل تعرف هامش ربح كل منتج؟</div>
+          <div class="curiosity-card">💸 كم تخسر شهريًا بدون أن تشعر؟</div>
+          <div class="curiosity-card">📊 هل فعلًا متجرك يحقق أرباحًا؟</div>
         </div>
-
-        <p class="hero-sub">
-          <svg class="icon icon-sm"><use href="#i-check"/></svg>
-          الاستشارة الأولى مجانية بالكامل.
-        </p>
 
         <div class="hero-cta">
           <a href="#" class="btn btn-primary btn-lg" data-cta="whatsapp">
-            احجز استشارتك المجانية
+            افحص متجرك
             <svg class="icon" style="stroke:currentColor"><use href="#i-arrow"/></svg>
           </a>
+        </div>
+        <p class="hero-cta-note">استشارة مجانية خلال 15 دقيقة</p>
+
+        <div class="hero-trust">
+          <span>✔ متخصص في المتاجر الإلكترونية</span>
+          <span>✔ خبرة في السوق السعودي</span>
+          <span>✔ بدون أي التزام</span>
         </div>
       </div>
 
@@ -1465,7 +1451,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="section-cta" data-reveal>
       <a href="#" class="btn btn-primary btn-lg" data-cta="whatsapp">
-        احجز استشارتك المجانية
+        افحص متجرك
         <svg class="icon" style="stroke:currentColor"><use href="#i-arrow"/></svg>
       </a>
     </div>
@@ -1536,7 +1522,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="section-cta" data-reveal>
       <a href="#" class="btn btn-primary btn-lg" data-cta="whatsapp">
-        احجز استشارتك المجانية
+        افحص متجرك
         <svg class="icon" style="stroke:currentColor"><use href="#i-arrow"/></svg>
       </a>
     </div>
@@ -1648,7 +1634,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="section-cta" data-reveal>
       <a href="#" class="btn btn-primary btn-lg" data-cta="whatsapp">
-        احجز استشارتك المجانية
+        افحص متجرك
         <svg class="icon" style="stroke:currentColor"><use href="#i-arrow"/></svg>
       </a>
     </div>
@@ -1860,7 +1846,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <div class="section-cta" data-reveal>
       <a href="#" class="btn btn-primary btn-lg" data-cta="whatsapp">
-        احجز استشارتك المجانية
+        افحص متجرك
         <svg class="icon" style="stroke:currentColor"><use href="#i-arrow"/></svg>
       </a>
     </div>
@@ -1896,7 +1882,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
       <div class="hero-cta">
         <a href="#" class="btn btn-primary btn-lg" data-cta="whatsapp">
-          احجز استشارتك المجانية
+          افحص متجرك
           <svg class="icon" style="stroke:currentColor"><use href="#i-arrow"/></svg>
         </a>
       </div>
