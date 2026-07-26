@@ -13,7 +13,10 @@ const root = __dirname;
 const clientsDir = path.join(root, 'clients');
 const indexPath = path.join(root, 'index.html');
 
-const IMAGE_EXT = ['.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg'];
+// .webp is deliberately excluded: this generator only treats it as a
+// derived <picture> sibling of a .png/.jpg/.jpeg source (see cardHtml),
+// never as a primary client logo file on its own.
+const IMAGE_EXT = ['.png', '.jpg', '.jpeg', '.gif', '.svg'];
 
 // industry badge per logo file — extend this as new client files are added.
 // files with no entry here simply render without a badge.
@@ -92,9 +95,17 @@ function cardHtml(file) {
     : '';
   const size = readImageSize(path.join(clientsDir, file));
   const dims = size ? ` width="${size.width}" height="${size.height}"` : '';
+  const webpFile = file.replace(/\.[^.]+$/, '.webp');
+  const hasWebp = file.toLowerCase() !== webpFile.toLowerCase()
+    && fs.existsSync(path.join(clientsDir, webpFile));
+  const webpSrc = './clients/' + webpFile.split('/').map(encodeURIComponent).join('/');
+  const img = `<img src="${src}"${dims} alt="شعار أحد عملاء حاسب" loading="lazy" />`;
+  const picture = hasWebp
+    ? `<picture><source srcset="${webpSrc}" type="image/webp" />${img}</picture>`
+    : img;
   return (
     `            <div class="logo-card">\n` +
-    `              <span class="logo-img-wrap"><img src="${src}"${dims} alt="شعار أحد عملاء حاسب" loading="lazy" /></span>` +
+    `              <span class="logo-img-wrap">${picture}</span>` +
     badgeHtml + `\n` +
     `            </div>\n`
   );

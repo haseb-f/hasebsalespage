@@ -1,43 +1,42 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.start'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-KTHZSFNL');</script>
-<!-- End Google Tag Manager -->
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<title>حاسب | برنامج استعادة الأرباح للمتاجر الإلكترونية</title>
+<meta name="description" content="اكتشف أين يُهدر ربح متجرك قبل أن تتخذ قرارًا ماليًا جديدًا. استشارة مالية مجانية مع مستشار متخصص في متاجر سلة وزد." />
+<link rel="icon" href="./assets/logo.png" type="image/png" />
+
+<!-- Preload only the one font FILE the LCP element (hero H1, font-weight:700)
+     actually needs at first paint. The other 3 weights still load via the
+     normal @font-face swap path below — no preload needed, they're not on
+     the critical path. -->
+<link rel="preload" as="font" type="font/woff2" href="./fonts/Expo_Arabic_Bold-gMswv_yR.woff2" crossorigin>
 
 <!-- ============================================================
-     GA4 DIRECT BOOTSTRAP (bypasses GTM's built-in Google tag)
-     GTM's own "Google tag" config tag (tied to this same
-     G-DCP0ZNJH7F ID, firing on Initialization) reliably registers
-     itself but never actually sends the config/page_view hit —
-     confirmed via live testing (zero g/collect requests across
-     repeated loads, verified with the Performance Resource Timing
-     API, while calling gtag('config', ...) directly always
-     succeeds). This is the standard Google-provided gtag.js snippet,
-     loaded independently so the initial GA4 hit fires reliably
-     regardless of that GTM-internal fault. All other GA4 event tags
-     (whatsapp_click, lead_generated, etc.) stay configured in GTM
-     as-is. If GTM's own Google tag is later fixed or removed, this
-     block should be reviewed to avoid a duplicate page_view.
-     ============================================================ -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DCP0ZNJH7F"></script>
-<script>
-window.dataLayer = window.dataLayer || [];
-function gtag(){window.dataLayer.push(arguments);}
-gtag('js', new Date());
-gtag('config', 'G-DCP0ZNJH7F');
-</script>
+     TRACKING — dataLayer + HasebDL are created synchronously right
+     away (near-zero cost; click/scroll handlers throughout the page
+     reference window.HasebDL immediately) but GTM and the GA4
+     gtag.js library themselves are NOT requested until the browser
+     is idle or the user first interacts, whichever happens first.
+     Previously GTM + gtag.js loaded eagerly in <head> and together
+     accounted for ~490KB and ~1.4s of main-thread script execution
+     competing directly with the hero's first paint. Events pushed
+     to dataLayer before the trackers attach are simply queued in
+     the array and processed in order once they do — nothing is
+     lost, including for visitors who bounce before "idle" fires,
+     since the idle callback has a hard 2s timeout regardless of
+     activity.
 
-<!-- ============================================================
-     HASEB DATALAYER UTILITY
-     Reusable event-push API used across the page. GTM tags for
-     GA4 / Meta Pixel / TikTok Pixel are configured inside the GTM
-     container to fire on these custom dataLayer events — see
-     GTM-SETUP.md for the exact trigger/tag/variable names to create.
+     Known duplication (unresolved, needs GTM admin access, not a
+     code fix): GTM's own built-in "Google tag" (config tag for
+     G-DCP0ZNJH7F, fires on Initialization) still separately loads
+     its own copy of gtag.js — confirmed via live network capture
+     (two ~163KB gtag/js requests per load). That GTM-side tag
+     reliably fails to actually send the hit (see git history), so
+     the bootstrap below is what makes GA4 work; the GTM-side tag
+     should be paused/deleted in the GTM UI to stop the redundant
+     download once someone has container access.
      ============================================================ -->
 <script>
 window.dataLayer = window.dataLayer || [];
@@ -66,13 +65,38 @@ window.HasebDL.pageView({
   page_path: window.location.pathname,
   page_title: document.title
 });
-</script>
 
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-<title>حاسب | برنامج استعادة الأرباح للمتاجر الإلكترونية</title>
-<meta name="description" content="اكتشف أين يُهدر ربح متجرك قبل أن تتخذ قرارًا ماليًا جديدًا. استشارة مالية مجانية مع مستشار متخصص في متاجر سلة وزد." />
-<link rel="icon" href="./assets/logo.png" type="image/png" />
+function haseb_loadTrackers(){
+  if(haseb_loadTrackers.started) return;
+  haseb_loadTrackers.started = true;
+
+  /* Google Tag Manager (Meta Pixel, TikTok Pixel and Clarity are all
+     configured as tags inside this container — see GTM-SETUP.md) */
+  (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+  new Date().getTime(),event:'gtm.start'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-KTHZSFNL');
+
+  /* GA4 direct bootstrap (see comment above this block) */
+  var gtagScript = document.createElement('script');
+  gtagScript.async = true;
+  gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-DCP0ZNJH7F';
+  document.head.appendChild(gtagScript);
+  function gtag(){window.dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-DCP0ZNJH7F');
+}
+
+if('requestIdleCallback' in window){
+  requestIdleCallback(haseb_loadTrackers, {timeout: 2000});
+} else {
+  setTimeout(haseb_loadTrackers, 1500);
+}
+['pointerdown','touchstart','keydown','scroll'].forEach(function(evt){
+  window.addEventListener(evt, haseb_loadTrackers, {once:true, passive:true});
+});
+</script>
 
 <style>
   /* ============================================================
@@ -1192,7 +1216,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <nav class="nav" id="nav">
     <div class="nav-row">
       <a class="nav-logo" href="#top" aria-label="حاسب">
-        <img src="./assets/logo.png" alt="شعار حاسب" />
+        <picture><source srcset="./assets/logo.webp" type="image/webp" /><img src="./assets/logo.png" alt="شعار حاسب" width="368" height="368" /></picture>
       </a>
 
       <div class="nav-ticker" aria-hidden="true">
@@ -1236,7 +1260,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="card-inner">
     <div class="hero-layout">
 
-      <div data-reveal>
+      <!-- Hero content is intentionally exempt from the [data-reveal]
+           fade-in used everywhere else on the page: it must paint on
+           first render (it's the LCP element), not wait for the
+           bottom-of-page IntersectionObserver script that only runs
+           after the entire rest of the document has been parsed. -->
+      <div>
         <span class="eyebrow"><span class="eyebrow-dot"></span>برنامج استعادة الأرباح للمتاجر الإلكترونية</span>
 
         <h1 class="hero-title">
@@ -1272,7 +1301,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
       </div>
 
-      <div class="hero-visual" data-reveal data-reveal-delay="2">
+      <div class="hero-visual">
         <div class="dash-card" id="dashCard">
 
           <div class="dash-head">
@@ -1631,89 +1660,89 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="logo-track" id="logoTrackA">
           <div class="logo-set">
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/1626132081_alfahad.png" width="400" height="300" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/1626132081_alfahad.webp" type="image/webp" /><img src="./clients/1626132081_alfahad.png" width="400" height="300" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">⌚ ساعات فاخرة</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/619802479_857537470617049_8156391552720329706_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/619802479_857537470617049_8156391552720329706_n.webp" type="image/webp" /><img src="./clients/619802479_857537470617049_8156391552720329706_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">📚 كتب وروايات</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/685a27b7feef7321c9fe6c75b4b230aa.jpeg" width="1080" height="1080" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/685a27b7feef7321c9fe6c75b4b230aa.webp" type="image/webp" /><img src="./clients/685a27b7feef7321c9fe6c75b4b230aa.jpeg" width="1080" height="1080" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🥗 مواد غذائية</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/897d29b33e15338b2839280fad463b9a.png" width="368" height="438" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/897d29b33e15338b2839280fad463b9a.webp" type="image/webp" /><img src="./clients/897d29b33e15338b2839280fad463b9a.png" width="368" height="438" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🎓 دورات تعليمية</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/channels4_profile.jpg" width="900" height="900" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/channels4_profile.webp" type="image/webp" /><img src="./clients/channels4_profile.jpg" width="900" height="900" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🥤 مشروبات</span>
             </div>
           </div>
           <div class="logo-set" aria-hidden="true">
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/1626132081_alfahad.png" width="400" height="300" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/1626132081_alfahad.webp" type="image/webp" /><img src="./clients/1626132081_alfahad.png" width="400" height="300" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">⌚ ساعات فاخرة</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/619802479_857537470617049_8156391552720329706_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/619802479_857537470617049_8156391552720329706_n.webp" type="image/webp" /><img src="./clients/619802479_857537470617049_8156391552720329706_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">📚 كتب وروايات</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/685a27b7feef7321c9fe6c75b4b230aa.jpeg" width="1080" height="1080" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/685a27b7feef7321c9fe6c75b4b230aa.webp" type="image/webp" /><img src="./clients/685a27b7feef7321c9fe6c75b4b230aa.jpeg" width="1080" height="1080" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🥗 مواد غذائية</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/897d29b33e15338b2839280fad463b9a.png" width="368" height="438" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/897d29b33e15338b2839280fad463b9a.webp" type="image/webp" /><img src="./clients/897d29b33e15338b2839280fad463b9a.png" width="368" height="438" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🎓 دورات تعليمية</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/channels4_profile.jpg" width="900" height="900" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/channels4_profile.webp" type="image/webp" /><img src="./clients/channels4_profile.jpg" width="900" height="900" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🥤 مشروبات</span>
             </div>
           </div>
           <div class="logo-set" aria-hidden="true">
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/1626132081_alfahad.png" width="400" height="300" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/1626132081_alfahad.webp" type="image/webp" /><img src="./clients/1626132081_alfahad.png" width="400" height="300" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">⌚ ساعات فاخرة</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/619802479_857537470617049_8156391552720329706_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/619802479_857537470617049_8156391552720329706_n.webp" type="image/webp" /><img src="./clients/619802479_857537470617049_8156391552720329706_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">📚 كتب وروايات</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/685a27b7feef7321c9fe6c75b4b230aa.jpeg" width="1080" height="1080" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/685a27b7feef7321c9fe6c75b4b230aa.webp" type="image/webp" /><img src="./clients/685a27b7feef7321c9fe6c75b4b230aa.jpeg" width="1080" height="1080" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🥗 مواد غذائية</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/897d29b33e15338b2839280fad463b9a.png" width="368" height="438" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/897d29b33e15338b2839280fad463b9a.webp" type="image/webp" /><img src="./clients/897d29b33e15338b2839280fad463b9a.png" width="368" height="438" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🎓 دورات تعليمية</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/channels4_profile.jpg" width="900" height="900" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/channels4_profile.webp" type="image/webp" /><img src="./clients/channels4_profile.jpg" width="900" height="900" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🥤 مشروبات</span>
             </div>
           </div>
           <div class="logo-set" aria-hidden="true">
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/1626132081_alfahad.png" width="400" height="300" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/1626132081_alfahad.webp" type="image/webp" /><img src="./clients/1626132081_alfahad.png" width="400" height="300" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">⌚ ساعات فاخرة</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/619802479_857537470617049_8156391552720329706_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/619802479_857537470617049_8156391552720329706_n.webp" type="image/webp" /><img src="./clients/619802479_857537470617049_8156391552720329706_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">📚 كتب وروايات</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/685a27b7feef7321c9fe6c75b4b230aa.jpeg" width="1080" height="1080" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/685a27b7feef7321c9fe6c75b4b230aa.webp" type="image/webp" /><img src="./clients/685a27b7feef7321c9fe6c75b4b230aa.jpeg" width="1080" height="1080" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🥗 مواد غذائية</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/897d29b33e15338b2839280fad463b9a.png" width="368" height="438" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/897d29b33e15338b2839280fad463b9a.webp" type="image/webp" /><img src="./clients/897d29b33e15338b2839280fad463b9a.png" width="368" height="438" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🎓 دورات تعليمية</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/channels4_profile.jpg" width="900" height="900" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/channels4_profile.webp" type="image/webp" /><img src="./clients/channels4_profile.jpg" width="900" height="900" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🥤 مشروبات</span>
             </div>
           </div>
@@ -1723,89 +1752,89 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="logo-track" id="logoTrackB">
           <div class="logo-set">
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/581759442_122111506119035588_3983094537228221383_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/581759442_122111506119035588_3983094537228221383_n.webp" type="image/webp" /><img src="./clients/581759442_122111506119035588_3983094537228221383_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">💰 منتجات رقمية ومالية</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/631068297_122096794419259995_4534826695669284242_n.jpg" width="938" height="938" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/631068297_122096794419259995_4534826695669284242_n.webp" type="image/webp" /><img src="./clients/631068297_122096794419259995_4534826695669284242_n.jpg" width="938" height="938" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🌍 تعليم لغات</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/7777bb7e1cd7abb10a933013c934269f.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/7777bb7e1cd7abb10a933013c934269f.webp" type="image/webp" /><img src="./clients/7777bb7e1cd7abb10a933013c934269f.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🍽️ مطعم</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/Artboard%201%20copy%203.png" width="1001" height="1001" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/Artboard%201%20copy%203.webp" type="image/webp" /><img src="./clients/Artboard%201%20copy%203.png" width="1001" height="1001" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">💻 برمجيات وتطبيقات</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/Copy%20of%20logo%203.jpg" width="1000" height="1000" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/Copy%20of%20logo%203.webp" type="image/webp" /><img src="./clients/Copy%20of%20logo%203.jpg" width="1000" height="1000" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">💼 خدمات استشارية</span>
             </div>
           </div>
           <div class="logo-set" aria-hidden="true">
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/581759442_122111506119035588_3983094537228221383_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/581759442_122111506119035588_3983094537228221383_n.webp" type="image/webp" /><img src="./clients/581759442_122111506119035588_3983094537228221383_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">💰 منتجات رقمية ومالية</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/631068297_122096794419259995_4534826695669284242_n.jpg" width="938" height="938" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/631068297_122096794419259995_4534826695669284242_n.webp" type="image/webp" /><img src="./clients/631068297_122096794419259995_4534826695669284242_n.jpg" width="938" height="938" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🌍 تعليم لغات</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/7777bb7e1cd7abb10a933013c934269f.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/7777bb7e1cd7abb10a933013c934269f.webp" type="image/webp" /><img src="./clients/7777bb7e1cd7abb10a933013c934269f.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🍽️ مطعم</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/Artboard%201%20copy%203.png" width="1001" height="1001" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/Artboard%201%20copy%203.webp" type="image/webp" /><img src="./clients/Artboard%201%20copy%203.png" width="1001" height="1001" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">💻 برمجيات وتطبيقات</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/Copy%20of%20logo%203.jpg" width="1000" height="1000" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/Copy%20of%20logo%203.webp" type="image/webp" /><img src="./clients/Copy%20of%20logo%203.jpg" width="1000" height="1000" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">💼 خدمات استشارية</span>
             </div>
           </div>
           <div class="logo-set" aria-hidden="true">
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/581759442_122111506119035588_3983094537228221383_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/581759442_122111506119035588_3983094537228221383_n.webp" type="image/webp" /><img src="./clients/581759442_122111506119035588_3983094537228221383_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">💰 منتجات رقمية ومالية</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/631068297_122096794419259995_4534826695669284242_n.jpg" width="938" height="938" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/631068297_122096794419259995_4534826695669284242_n.webp" type="image/webp" /><img src="./clients/631068297_122096794419259995_4534826695669284242_n.jpg" width="938" height="938" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🌍 تعليم لغات</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/7777bb7e1cd7abb10a933013c934269f.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/7777bb7e1cd7abb10a933013c934269f.webp" type="image/webp" /><img src="./clients/7777bb7e1cd7abb10a933013c934269f.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🍽️ مطعم</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/Artboard%201%20copy%203.png" width="1001" height="1001" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/Artboard%201%20copy%203.webp" type="image/webp" /><img src="./clients/Artboard%201%20copy%203.png" width="1001" height="1001" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">💻 برمجيات وتطبيقات</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/Copy%20of%20logo%203.jpg" width="1000" height="1000" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/Copy%20of%20logo%203.webp" type="image/webp" /><img src="./clients/Copy%20of%20logo%203.jpg" width="1000" height="1000" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">💼 خدمات استشارية</span>
             </div>
           </div>
           <div class="logo-set" aria-hidden="true">
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/581759442_122111506119035588_3983094537228221383_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/581759442_122111506119035588_3983094537228221383_n.webp" type="image/webp" /><img src="./clients/581759442_122111506119035588_3983094537228221383_n.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">💰 منتجات رقمية ومالية</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/631068297_122096794419259995_4534826695669284242_n.jpg" width="938" height="938" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/631068297_122096794419259995_4534826695669284242_n.webp" type="image/webp" /><img src="./clients/631068297_122096794419259995_4534826695669284242_n.jpg" width="938" height="938" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🌍 تعليم لغات</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/7777bb7e1cd7abb10a933013c934269f.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/7777bb7e1cd7abb10a933013c934269f.webp" type="image/webp" /><img src="./clients/7777bb7e1cd7abb10a933013c934269f.jpg" width="500" height="500" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">🍽️ مطعم</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/Artboard%201%20copy%203.png" width="1001" height="1001" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/Artboard%201%20copy%203.webp" type="image/webp" /><img src="./clients/Artboard%201%20copy%203.png" width="1001" height="1001" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">💻 برمجيات وتطبيقات</span>
             </div>
             <div class="logo-card">
-              <span class="logo-img-wrap"><img src="./clients/Copy%20of%20logo%203.jpg" width="1000" height="1000" alt="شعار أحد عملاء حاسب" loading="lazy" /></span>
+              <span class="logo-img-wrap"><picture><source srcset="./clients/Copy%20of%20logo%203.webp" type="image/webp" /><img src="./clients/Copy%20of%20logo%203.jpg" width="1000" height="1000" alt="شعار أحد عملاء حاسب" loading="lazy" /></picture></span>
               <span class="logo-badge">💼 خدمات استشارية</span>
             </div>
           </div>
@@ -1866,7 +1895,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      ============================================================ -->
 <footer class="footer">
   <div class="container">
-    <img src="./assets/logo.png" alt="شعار حاسب" />
+    <picture><source srcset="./assets/logo.webp" type="image/webp" /><img src="./assets/logo.png" alt="شعار حاسب" width="368" height="368" loading="lazy" /></picture>
     <p class="tagline">الاستشارات والتطوير الإداري</p>
     <p class="rights">© 2026 حاسب. جميع الحقوق محفوظة.</p>
   </div>
