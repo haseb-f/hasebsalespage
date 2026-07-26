@@ -403,22 +403,32 @@ if(document.readyState === 'complete'){
   .hero-layout{display:grid;grid-template-columns:1fr;gap:64px;align-items:center;}
   @media(min-width:1050px){.hero-layout{grid-template-columns:1.02fr .98fr;gap:40px;}}
 
-  /* top-of-hero alert pill — reuses the existing warn-* tokens already
-     defined for pain-point iconography, just applied to a badge for the
-     first time, so it stays visually on-brand rather than introducing a
-     new red. */
+  /* top-of-hero warning banner — deliberately loud/high-contrast (this
+     one specific badge is meant to read as an urgent alert, unlike the
+     rest of the page's soft/premium palette). Font stays the existing
+     self-hosted Expo Arabic (no new font requested/loaded) at
+     font-weight:800 — a weight we have no actual file for, so the
+     browser synthesizes extra boldness on top of the loaded 700 file;
+     close to "ExtraBold" in spirit without a new network request. */
   .hero-alert{
-    display:inline-flex;align-items:center;gap:7px;
-    font-size:.8125rem;font-weight:700;letter-spacing:.01em;
-    color:var(--warn-600);
-    background:var(--warn-50);
-    border:1px solid var(--warn-100);
-    padding:7px 16px;
-    border-radius:var(--radius-full);
+    display:inline-flex;align-items:center;gap:12px;
+    min-height:60px;
+    font-weight:800;letter-spacing:-.02em;
+    font-size:22px;
+    color:#FFD54F;
+    background:#C62828;
+    border:2px solid #8B0000;
+    padding:12px 32px;
+    border-radius:18px;
+    box-shadow:0 10px 26px -6px rgba(198,40,40,.55), 0 2px 6px rgba(139,0,0,.35);
+    animation:hero-alert-pulse 3s ease-in-out infinite;
   }
-  .hero-alert-emoji{display:inline-block;animation:hero-alert-pulse 1.8s ease-in-out infinite;transform-origin:center;}
-  @keyframes hero-alert-pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.25);opacity:.65;}}
-  @media(prefers-reduced-motion:reduce){.hero-alert-emoji{animation:none;}}
+  @media(max-width:640px){
+    .hero-alert{font-size:18px;padding:10px 22px;min-height:52px;gap:9px;}
+  }
+  .hero-alert-emoji{display:inline-block;flex-shrink:0;line-height:1;}
+  @keyframes hero-alert-pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.03);opacity:.92;}}
+  @media(prefers-reduced-motion:reduce){.hero-alert{animation:none;}}
 
   .hero-title{
     font-size:clamp(2.05rem,1.5rem + 2.6vw,3.4rem);
@@ -1273,7 +1283,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
            scroll-triggered [data-reveal] system — so it never delays
            first paint either. -->
       <div>
-        <span class="hero-alert"><span class="hero-alert-emoji">🔴</span>تنبيه لأصحاب المتاجر الإلكترونية</span>
+        <span class="hero-alert"><span class="hero-alert-emoji">⚠️</span>تنبيه لأصحاب المتاجر الإلكترونية</span>
 
         <h1 class="hero-title hero-title-curiosity">
           قد يكون<br>
