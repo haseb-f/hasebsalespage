@@ -423,8 +423,20 @@ if(document.readyState === 'complete'){
     box-shadow:0 10px 26px -6px rgba(198,40,40,.55), 0 2px 6px rgba(139,0,0,.35);
     animation:hero-alert-pulse 3s ease-in-out infinite;
   }
+  /* mobile-only: punchier red + larger footprint than desktop (desktop
+     is intentionally left exactly as-is above) */
   @media(max-width:640px){
-    .hero-alert{font-size:18px;padding:10px 22px;min-height:52px;gap:9px;}
+    .hero-alert{
+      font-size:18px;gap:12px;
+      background:#D32F2F;
+      border-color:#B71C1C;
+      color:#FFE082;
+      border-radius:22px;
+      min-height:64px;
+      padding:18px 28px;
+      box-shadow:0 12px 28px rgba(211,47,47,.28);
+    }
+    .hero-alert-emoji{font-size:1.4em;}
   }
   .hero-alert-emoji{display:inline-block;flex-shrink:0;line-height:1;}
   @keyframes hero-alert-pulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.03);opacity:.92;}}
@@ -444,6 +456,32 @@ if(document.readyState === 'complete'){
   /* the curiosity headline stacks short punchy lines instead of wrapping
      prose, so it reads best with a tighter line-height than the default */
   .hero-title-curiosity{line-height:1.16;}
+
+  /* desktop/mobile headline variants — see the HTML comment above the H1.
+     Desktop shows .hero-title-desktop (untouched, original markup);
+     mobile swaps to .hero-title-mobile with its own grouping/rhythm. */
+  .hero-title-mobile{display:none;}
+  @media(max-width:640px){
+    .hero-title-desktop{display:none;}
+    .hero-title-mobile{
+      display:block;
+      text-align:center;
+      font-weight:900;
+      line-height:1.15;
+      letter-spacing:normal;
+      /* deliberately smaller than .hero-title's shared clamp() minimum
+         (~32.8px) — tested against 360px and 375px viewports with real
+         hero-card padding: at the clamp's size "متجرك يبيع أكثر" and
+         "أرباحك أقل" wrap mid-phrase instead of only at the intended
+         manual <br>, which is exactly the "awkward wrapping" this was
+         meant to fix. 28px keeps both intended line groups intact. */
+      font-size:1.75rem;
+    }
+    .htm-line{display:block;margin-bottom:14px;}
+    .htm-line:last-child{margin-bottom:0;}
+    .htm-big{font-size:1.15em;}
+    .htm-lakin{font-size:.75em;color:var(--gray-700);font-weight:800;}
+  }
 
   .hero-lead{
     margin-top:22px;font-size:clamp(1rem,.95rem + .3vw,1.1875rem);
@@ -1285,13 +1323,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div>
         <span class="hero-alert"><span class="hero-alert-emoji">⚠️</span>تنبيه لأصحاب المتاجر الإلكترونية</span>
 
+        <!-- Two markup variants, toggled by CSS media query only (no JS,
+             no post-load swap, so nothing ever shifts): desktop keeps its
+             original 6-line stack untouched; mobile gets a different
+             grouping/line-break rhythm per a separate mobile-only design
+             pass. Only one of the two is ever laid out at a time. -->
         <h1 class="hero-title hero-title-curiosity">
-          قد يكون<br>
-          <span class="accent">متجرك</span><br>
-          يبيع أكثر من أي وقت...<br>
-          لكن<br>
-          <span class="accent-red">أرباحك</span><br>
-          <span class="accent-red">أقل</span> من أي وقت.
+          <span class="hero-title-desktop">
+            قد يكون<br>
+            <span class="accent">متجرك</span><br>
+            يبيع أكثر من أي وقت...<br>
+            لكن<br>
+            <span class="accent-red">أرباحك</span><br>
+            <span class="accent-red">أقل</span> من أي وقت.
+          </span>
+          <span class="hero-title-mobile">
+            <span class="htm-line">قد يكون</span>
+            <span class="htm-line"><span class="accent htm-big">متجرك</span> يبيع أكثر<br>من أي وقت...</span>
+            <span class="htm-line htm-lakin">لكن</span>
+            <span class="htm-line"><span class="accent-red htm-big">أرباحك</span> أقل<br>من أي وقت.</span>
+          </span>
         </h1>
 
         <p class="hero-lead">
